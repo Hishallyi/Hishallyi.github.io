@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hishallyi.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="总结MySQL数据库知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL学习笔记">
+<meta property="og:url" content="http://hishallyi.github.io/2024/05/06/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="hishallyi">
+<meta property="og:description" content="总结MySQL数据库知识">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://hishallyi.github.io/assets/image-20230918181729750.png">
+<meta property="og:image" content="http://hishallyi.github.io/assets/image-20230918181558492.png">
+<meta property="article:published_time" content="2024-05-05T17:01:30.000Z">
+<meta property="article:modified_time" content="2024-05-14T16:12:47.195Z">
+<meta property="article:author" content="Hishallyi">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hishallyi.github.io/assets/image-20230918181729750.png">
+
+
+<link rel="canonical" href="http://hishallyi.github.io/2024/05/06/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://hishallyi.github.io/2024/05/06/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/","path":"2024/05/06/MySQL学习笔记/","title":"MySQL学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL学习笔记 | hishallyi</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">hishallyi</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">hishallyi world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">数据库基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.</span> <span class="nav-text">一、数据库查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E9%80%89%E6%8B%A9"><span class="nav-number">1.1.1.</span> <span class="nav-text">（一）选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E6%8A%95%E5%BD%B1"><span class="nav-number">1.1.2.</span> <span class="nav-text">（二）投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.1.3.</span> <span class="nav-text">（三）连接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">1. 内连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">2. 外连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BA%A4%E5%8F%89%E8%BF%9E%E6%8E%A5%EF%BC%88%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF%EF%BC%89"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">3. 交叉连接（笛卡尔积）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E5%9B%9B%EF%BC%89%E9%99%A4%E6%B3%95"><span class="nav-number">1.1.4.</span> <span class="nav-text">（四）除法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">二、分组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">MySQL安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">Windows安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E5%AE%89%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">Linux安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">MySQL命令总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%8F%8A%E5%85%B3%E9%97%AD-MySQL-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">启动及关闭 MySQL 服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-%E7%B3%BB%E7%BB%9F%E4%B8%8B"><span class="nav-number">3.1.1.</span> <span class="nav-text">Windows 系统下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E7%B3%BB%E7%BB%9F%E4%B8%8B"><span class="nav-number">3.1.2.</span> <span class="nav-text">Linux 系统下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac-OS-%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.1.3.</span> <span class="nav-text">Mac OS 系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86MySQL%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">3.2.</span> <span class="nav-text">管理MySQL的命令</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hishallyi</p>
+  <div class="site-description" itemprop="description">海小逸的小天地</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://hishallyi.github.io/2024/05/06/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hishallyi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hishallyi">
+      <meta itemprop="description" content="海小逸的小天地">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL学习笔记 | hishallyi">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-05-06 01:01:30" itemprop="dateCreated datePublished" datetime="2024-05-06T01:01:30+08:00">2024-05-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-05-15 00:12:47" itemprop="dateModified" datetime="2024-05-15T00:12:47+08:00">2024-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">技术分享</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>总结MySQL数据库知识</p>
+<span id="more"></span>
+
+<h1 id="数据库基础"><a href="#数据库基础" class="headerlink" title="数据库基础"></a>数据库基础</h1><h2 id="一、数据库查询"><a href="#一、数据库查询" class="headerlink" title="一、数据库查询"></a>一、数据库查询</h2><p>关系也就是表，可以把对关系的运算看作对于一张数据库表的查询操作，对于关系的运算也即对表中某些行列的操作</p>
+<p>传统的集合运算符：并（union）、差（except）、交、笛卡尔积</p>
+<p>专门的关系运算符：选择、投影、连接、除法</p>
+<h3 id="（一）选择"><a href="#（一）选择" class="headerlink" title="（一）选择"></a>（一）选择</h3><p>选择数据库表中符合条件的<code>行</code>，即选择满足条件的元组，一般用$\sigma$表示</p>
+<h3 id="（二）投影"><a href="#（二）投影" class="headerlink" title="（二）投影"></a>（二）投影</h3><p>选择关系中<code>列</code>的子集，即选择原表中的某几列属性，返回的是一个新的表，一般用$\pi$表示</p>
+<blockquote>
+<p>注意：投影结果中不应该包含重复行</p>
+</blockquote>
+<h3 id="（三）连接"><a href="#（三）连接" class="headerlink" title="（三）连接"></a>（三）连接</h3><p>连接用于连接多个表，使用 JOIN 关键字，并且条件语句使用 ON 而不是 WHERE。</p>
+<p>连接可以替换子查询，并且比子查询的效率一般会更快。</p>
+<p>可以用 AS 给列名、计算字段和表名取别名，给表名取别名是为了简化 SQL 语句以及连接相同表</p>
+<h4 id="1-内连接"><a href="#1-内连接" class="headerlink" title="1. 内连接"></a>1. 内连接</h4><ul>
+<li>等值连接</li>
+<li>非等值连接</li>
+</ul>
+<h4 id="2-外连接"><a href="#2-外连接" class="headerlink" title="2. 外连接"></a>2. 外连接</h4><ul>
+<li><p>左外连接</p>
+</li>
+<li><p>右外连接</p>
+</li>
+<li><p>全连接：左右两边舍弃的元组都保留</p>
+</li>
+</ul>
+<h4 id="3-交叉连接（笛卡尔积）"><a href="#3-交叉连接（笛卡尔积）" class="headerlink" title="3. 交叉连接（笛卡尔积）"></a>3. 交叉连接（笛卡尔积）</h4><h3 id="（四）除法"><a href="#（四）除法" class="headerlink" title="（四）除法"></a>（四）除法</h3><h2 id="二、分组"><a href="#二、分组" class="headerlink" title="二、分组"></a>二、分组</h2><p>关键字：GROUP BY</p>
+<p>将具有相同数据值的行放在同一组中</p>
+<p>用HAVING过滤分组，用ORDER BY可以按照汇总字段进行排序</p>
+<p><strong>分组规定：</strong></p>
+<ul>
+<li>GROUP BY 子句出现在 WHERE 子句之后，ORDER BY 子句之前；</li>
+<li><strong>除了汇总字段外，SELECT 语句中的每一字段都必须在 GROUP BY 子句中给出；</strong></li>
+<li>NULL 的行会单独分为一组；</li>
+<li>大多数 SQL 实现不支持 GROUP BY 列具有可变长度的数据类型。</li>
+</ul>
+<h1 id="MySQL安装配置"><a href="#MySQL安装配置" class="headerlink" title="MySQL安装配置"></a>MySQL安装配置</h1><h2 id="Windows安装"><a href="#Windows安装" class="headerlink" title="Windows安装"></a>Windows安装</h2><p>安装好MySQL数据库之后，进行my.ini初始化文件的配置，创建环境变量，以管理员身份打开命令提示符cmd，进入mysql安装路径的bin目录下</p>
+<blockquote>
+<p>管理员身份打开cmd，并在mysql安装目录的bin目录下按顺序执行下面的命令</p>
+</blockquote>
+<ol>
+<li>按照前期配置的my.ini文件，初始化相关配置</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld <span class="comment">--initialize --console</span></span><br></pre></td></tr></table></figure>
+
+<p>这一步会随机生成一个默认密码，需要复制保存，以便在稍后启动服务时使用</p>
+<p><img src="/assets/image-20230918181729750.png" alt="image-20230918181729750"></p>
+<ol start="2">
+<li>安装mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld <span class="comment">--install mysql</span></span><br></pre></td></tr></table></figure>
+
+<p>安装成功会有安装成功的提示</p>
+<ol start="3">
+<li>启动mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net <span class="keyword">start</span> mysql</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>登录mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">-</span>uroot <span class="operator">-</span>p</span><br></pre></td></tr></table></figure>
+
+<p>登录需要输入密码，输入刚才默认创建的密码，回车之后出现如图提示表示登录成功</p>
+<p><img src="/assets/image-20230918181558492.png" alt="image-20230918181558492"></p>
+<ol start="5">
+<li>修改默认密码</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;chk123&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>登录到mysql之后，需要修改密码，注意上面命令结尾处的分号不要省略，因为在mysql只能识别语句，不能识别命令，因此每个命令都需要加入分号才能被识别</p>
+<blockquote>
+<p>本地密码：chk123</p>
+</blockquote>
+<ol start="6">
+<li>在MySQL安装目录下的my.ini文件中配置MySQL端口号，默认端口号是3306</li>
+</ol>
+<h2 id="Linux安装"><a href="#Linux安装" class="headerlink" title="Linux安装"></a>Linux安装</h2><p>参考链接：<a target="_blank" rel="noopener" href="http://t.csdnimg.cn/PWyoG">http://t.csdnimg.cn/PWyoG</a></p>
+<h1 id="MySQL命令总结"><a href="#MySQL命令总结" class="headerlink" title="MySQL命令总结"></a>MySQL命令总结</h1><h2 id="启动及关闭-MySQL-服务器"><a href="#启动及关闭-MySQL-服务器" class="headerlink" title="启动及关闭 MySQL 服务器"></a>启动及关闭 MySQL 服务器</h2><h3 id="Windows-系统下"><a href="#Windows-系统下" class="headerlink" title="Windows 系统下"></a>Windows 系统下</h3><p><strong>启动 MySQL 服务器:</strong></p>
+<p>1、<strong>通过 “服务” 管理工具：</strong> 打开”运行”对话框（Win + R），输入 <strong>services.msc</strong>，找到”MySQL”服务，右击选择”启动”。</p>
+<p>2、<strong>通过命令提示符：</strong> 打开命令提示符（以管理员身份），输入以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net start mysql</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭MySQL服务器:</strong></p>
+<p>1、<strong>通过 “服务” 管理工具：</strong>同样打开”运行”对话框，输入 services.msc，找到 “MySQL” 服务，右击选择”停止”。</p>
+<p>2、<strong>通过命令提示符：</strong> 打开命令提示符（以管理员身份），输入以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net stop mysql</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux-系统下"><a href="#Linux-系统下" class="headerlink" title="Linux 系统下"></a>Linux 系统下</h3><p><strong>1、启动 MySQL 服务：</strong></p>
+<p>使用 <strong>systemd</strong>命令（适用于大多数现代 Linux 发行版，如 Ubuntu、CentOS 等）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 <strong>service</strong> 命令（在一些较旧的发行版中）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysql start</span><br></pre></td></tr></table></figure>
+
+<p><strong>2、关闭 MySQL 服务：</strong></p>
+<p><strong>使用 systemd：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysql stop</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、重启 MySQL 服务：</strong></p>
+<p><strong>使用 systemd：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
+
+<p><strong>4、检查 MySQL 服务状态：</strong></p>
+<p>使用 systemd命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysql status</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mac-OS-系统"><a href="#Mac-OS-系统" class="headerlink" title="Mac OS 系统"></a>Mac OS 系统</h3><p>启动 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server start</span><br></pre></td></tr></table></figure>
+
+<p>关闭 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server stop</span><br></pre></td></tr></table></figure>
+
+<p>重启 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server restart</span><br></pre></td></tr></table></figure>
+
+<p>检查 MySQL 服务状态：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server status</span><br></pre></td></tr></table></figure>
+
+<p>以上命令中，mysql 可能会因为安装路径或版本的不同而有所变化。</p>
+<p>在 Mac OS 中，MySQL 的安装路径通常是 &#x2F;usr&#x2F;local&#x2F;mysql&#x2F;，因此启动和关闭 MySQL 服务需要使用这个路径下的 mysql.server 脚本。</p>
+<h2 id="管理MySQL的命令"><a href="#管理MySQL的命令" class="headerlink" title="管理MySQL的命令"></a>管理MySQL的命令</h2><p><strong>登录命令</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">只用用户名登录：mysql <span class="operator">-</span>u 用户名 <span class="operator">-</span>p</span><br><span class="line">用数据库ip地址登录：mysql <span class="operator">-</span>h 主机ip <span class="operator">-</span>u 用户名 <span class="operator">-</span>p</span><br><span class="line">    <span class="operator">-</span>h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;</span><br><span class="line">    <span class="operator">-</span>u : 所要登录的用户名;</span><br><span class="line">    <span class="operator">-</span>p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。</span><br><span class="line">    </span><br><span class="line">例如：</span><br><span class="line">mysql <span class="operator">-</span>u root <span class="operator">-</span>p</span><br><span class="line">然后需要输入用户root设置的密码才能登录成功</span><br></pre></td></tr></table></figure>
+
+<p><strong>退出命令</strong></p>
+<p>在MySQL命令行输入<code>exit</code>回车即可退出</p>
+<blockquote>
+<p>在登录mysql之后输入的mysql命令，记的加上分号，不然不是一条被识别的mysql语句，就无法别执行</p>
+<p><code>mysql&gt; mysql语句;</code></p>
+</blockquote>
+<ul>
+<li><p><strong>USE *数据库名*</strong> :<br>选择要操作的Mysql数据库，使用该命令后所有Mysql命令都只针对该数据库。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use RUNOOB;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW DATABASES:</strong><br>列出 MySQL 数据库管理系统的数据库列表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| RUNOOB             |</span><br><span class="line">| cdcol              |</span><br><span class="line">| mysql              |</span><br><span class="line">| onethink           |</span><br><span class="line">| performance_schema |</span><br><span class="line">| phpmyadmin         |</span><br><span class="line">| test               |</span><br><span class="line">| wecenter           |</span><br><span class="line">| wordpress          |</span><br><span class="line">+--------------------+</span><br><span class="line">10 rows in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW TABLES:</strong><br>显示指定数据库的所有表，使用该命令前需要使用 use 命令来选择要操作的数据库。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use RUNOOB;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; SHOW TABLES;</span><br><span class="line">+------------------+</span><br><span class="line">| Tables_in_runoob |</span><br><span class="line">+------------------+</span><br><span class="line">| employee_tbl     |</span><br><span class="line">| runoob_tbl       |</span><br><span class="line">| tcount_tbl       |</span><br><span class="line">+------------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW COLUMNS FROM *数据表*:</strong><br>显示数据表的属性，属性类型，主键信息 ，是否为 NULL，默认值等其他信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW COLUMNS FROM runoob_tbl;</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">| Field           | Type         | Null | Key | Default | Extra |</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">| runoob_id       | int(11)      | NO   | PRI | NULL    |       |</span><br><span class="line">| runoob_title    | varchar(255) | YES  |     | NULL    |       |</span><br><span class="line">| runoob_author   | varchar(255) | YES  |     | NULL    |       |</span><br><span class="line">| submission_date | date         | YES  |     | NULL    |       |</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">4 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW INDEX FROM *数据表*:</strong><br>显示数据表的详细索引信息，包括PRIMARY KEY（主键）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW INDEX FROM runoob_tbl;</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| runoob_tbl |          0 | PRIMARY  |            1 | runoob_id   | A         |           2 |     NULL | NULL   |      | BTREE      |         |               |</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW TABLE STATUS [FROM db_name] [LIKE ‘pattern’] \G:</strong><br>该命令将输出Mysql数据库管理系统的性能及统计信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW TABLE STATUS  FROM RUNOOB;   # 显示数据库 RUNOOB 中所有表的信息</span><br><span class="line"></span><br><span class="line">mysql&gt; SHOW TABLE STATUS from RUNOOB LIKE &#x27;runoob%&#x27;;     # 表名以runoob开头的表的信息</span><br><span class="line">mysql&gt; SHOW TABLE STATUS from RUNOOB LIKE &#x27;runoob%&#x27;\G;   # 加上 \G，查询结果按列打印</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/05/Hexo%E5%BB%BA%E7%AB%99%E7%AC%94%E8%AE%B0/" rel="prev" title="Hexo建站笔记">
+                  <i class="fa fa-angle-left"></i> Hexo建站笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/06/%E7%BC%96%E7%A8%8B%E5%91%BD%E4%BB%A4/" rel="next" title="编程命令">
+                  编程命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hishallyi</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
