@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.2.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -12,14 +12,15 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=微软雅黑:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hishallyi.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hishallyi.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false,"Pisces | Gemini":300},"copycode":{"enable":true,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
 
-    <meta name="description" content="后端学习笔记">
+  <meta name="description" content="后端学习笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="后端开发笔记">
 <meta property="og:url" content="http://hishallyi.github.io/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/index.html">
@@ -41,18 +42,21 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://hishallyi.github.io/assets/image-20240117215856267.png">
 
-
 <link rel="canonical" href="http://hishallyi.github.io/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/">
 
 
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://hishallyi.github.io/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/","path":"2024/05/05/后端开发笔记/","title":"后端开发笔记"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>后端开发笔记 | hishallyi</title>
+  <title>后端开发笔记 | hishallyi</title>
   
-
-
 
 
 
@@ -60,173 +64,198 @@
 
 
   <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">hishallyi</p>
-      <i class="logo-line"></i>
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hishallyi</h1>
+      <span class="logo-line-after"><i></i></span>
     </a>
       <p class="site-subtitle" itemprop="description">hishallyi world</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
+
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
-
-</header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">常用知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8E%A7%E5%88%B6%E5%99%A8Controller"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 控制器Controller</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E6%98%A0%E5%B0%84"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1. 路由映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2. 参数传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3. 数据响应</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.1.3.1.</span> <span class="nav-text">3.1 静态资源访问</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-SpringBoot%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.1.3.2.</span> <span class="nav-text">3.2 SpringBoot实现文件上传功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">1.1.1.3.3.</span> <span class="nav-text">3.3 拦截器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Swagger"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Swagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90Web-API%E6%96%87%E6%A1%A3"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">使用Swagger自动生成Web API文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AESwagger"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">配置Swagger</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Swagger%E8%BF%9B%E8%A1%8C%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">使用Swagger进行接口测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swagger%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">Swagger常用注解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%83%AD%E9%83%A8%E7%BD%B2"><span class="nav-number">1.2.</span> <span class="nav-text">开发环境热部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">系统配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.4.</span> <span class="nav-text">Mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8XML%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84SQL%E5%91%BD%E4%BB%A4"><span class="nav-number">1.4.1.</span> <span class="nav-text">调用XML文件中的SQL命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%94%A8%E6%B3%95%E5%92%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.4.2.</span> <span class="nav-text">常用用法和设置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDEA%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">2.</span> <span class="nav-text">IDEA常用快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1. 快速生成基本函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90main%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2. 快速生成main函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E5%A4%9A%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">2.3.</span> <span class="nav-text">3. 快速生成多行注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90print%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">4. 快速生成print语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86"><span class="nav-number">3.</span> <span class="nav-text">开发知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#POLO%E5%8F%8A%E5%85%B6%E8%BD%AC%E6%8D%A2-PO%E3%80%81DO%E3%80%81DTO%E3%80%81VO"><span class="nav-number">3.1.</span> <span class="nav-text">POLO及其转换-PO、DO、DTO、VO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E6%8B%AC"><span class="nav-number">3.1.2.</span> <span class="nav-text">概括</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB"><span class="nav-number">3.2.</span> <span class="nav-text">知识点汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP"><span class="nav-number">3.3.</span> <span class="nav-text">AOP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E6%B1%87%E6%80%BB"><span class="nav-number">4.</span> <span class="nav-text">注解汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%8E%9F%E7%94%9F%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.1.</span> <span class="nav-text">Java原生注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Override"><span class="nav-number">4.1.1.</span> <span class="nav-text">@Override</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E6%A1%86%E6%9E%B6%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.2.</span> <span class="nav-text">Spring框架注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Autowired%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="nav-number">4.2.1.</span> <span class="nav-text">@Autowired：自动装配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component"><span class="nav-number">4.2.2.</span> <span class="nav-text">@Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component-%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.2.3.</span> <span class="nav-text">@Component 注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Autowired-%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.2.4.</span> <span class="nav-text">@Autowired 注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">4.2.5.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ExceptionHandler"><span class="nav-number">4.2.6.</span> <span class="nav-text">@ExceptionHandler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RestControllerAdvice"><span class="nav-number">4.2.7.</span> <span class="nav-text">@RestControllerAdvice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.3.</span> <span class="nav-text">Mybatis相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mapper"><span class="nav-number">4.3.1.</span> <span class="nav-text">@Mapper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lombok%E5%BA%93%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.4.</span> <span class="nav-text">Lombok库注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data"><span class="nav-number">4.4.1.</span> <span class="nav-text">@Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Slf4j"><span class="nav-number">4.4.2.</span> <span class="nav-text">@Slf4j@</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.5.</span> <span class="nav-text">Controller相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RestController"><span class="nav-number">4.5.1.</span> <span class="nav-text">@RestController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PathVariable"><span class="nav-number">4.5.2.</span> <span class="nav-text">@PathVariable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mapping%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.6.</span> <span class="nav-text">Mapping相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestMapping"><span class="nav-number">4.6.1.</span> <span class="nav-text">@RequestMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestBody"><span class="nav-number">4.6.2.</span> <span class="nav-text">@RequestBody</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swagger%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.7.</span> <span class="nav-text">Swagger相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Api"><span class="nav-number">4.7.1.</span> <span class="nav-text">@Api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiOperation"><span class="nav-number">4.7.2.</span> <span class="nav-text">@ApiOperation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModel"><span class="nav-number">4.7.3.</span> <span class="nav-text">@ApiModel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModelProperty"><span class="nav-number">4.7.4.</span> <span class="nav-text">@ApiModelProperty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">4.8.</span> <span class="nav-text">异常相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ExceptionHandler-1"><span class="nav-number">4.8.1.</span> <span class="nav-text">@ExceptionHandler</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E8%AF%AD%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">Java语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E8%AF%AD%E6%B3%95%E5%92%8C%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="nav-number">5.1.1.</span> <span class="nav-text">泛型语法和机制：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-number">5.1.2.</span> <span class="nav-text">泛型原理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">5.1.3.</span> <span class="nav-text">自定义泛型示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3Java%E6%B3%A8%E8%A7%A3%E6%9C%BA%E5%88%B6"><span class="nav-number">5.2.</span> <span class="nav-text">详解Java注解机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3"><span class="nav-number">5.2.1.</span> <span class="nav-text">详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">5.2.2.</span> <span class="nav-text">注解机制实现的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="nav-number">5.3.</span> <span class="nav-text">详解Java反射机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%EF%BC%9A"><span class="nav-number">5.3.1.</span> <span class="nav-text">Java反射机制的主要组成部分：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">5.3.2.</span> <span class="nav-text">反射的基本用法示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%9A"><span class="nav-number">5.3.3.</span> <span class="nav-text">注意事项：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E8%AE%B0%E5%BD%95"><span class="nav-number">6.</span> <span class="nav-text">经典记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E6%89%BE%E5%AD%A9%E5%AD%90%E6%95%B0%E9%87%8F"><span class="nav-number">6.1.</span> <span class="nav-text">递归查找孩子数量</span></a></li></ol></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Hishallyi</p>
-  <div class="site-description" itemprop="description">海小逸的小天地</div>
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
 </div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">7</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">categories</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
 </div>
 
-        </div>
-      </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
-          <i class="fa fa-arrow-up"></i>
-          <span>0%</span>
-        </div>
     </div>
+  </div>
+
+</div>
+    </header>
 
     
-  </aside>
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
 
 
-    </div>
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
 
-    <div class="main-inner post posts-expand">
+          <div class="content post posts-expand">
+            
 
-
+    
   
-
-
-<div class="post-block">
   
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://hishallyi.github.io/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Hishallyi">
+      <meta itemprop="description" content="海小逸的小天地">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="hishallyi">
-      <meta itemprop="description" content="海小逸的小天地">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="后端开发笔记 | hishallyi">
-      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           后端开发笔记
         </h1>
 
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2024-05-05 19:30:31" itemprop="dateCreated datePublished" datetime="2024-05-05T19:30:31+08:00">2024-05-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 00:13:16" itemprop="dateModified" datetime="2024-05-15T00:13:16+08:00">2024-05-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">技术分享</span></a>
-        </span>
-    </span>
+              <time title="Created: 2024-05-05 19:30:31" itemprop="dateCreated datePublished" datetime="2024-05-05T19:30:31+08:00">2024-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-05-15 00:13:16" itemprop="dateModified" datetime="2024-05-15T00:13:16+08:00">2024-05-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">技术分享</span></a>
+                </span>
+            </span>
 
-  
-</div>
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -234,7 +263,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>后端学习笔记</p>
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>后端学习笔记</p>
 <span id="more"></span>
 
 <h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><blockquote>
@@ -661,8 +693,25 @@
     
     
     
+        
 
-    <footer class="post-footer">
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Hishallyi
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://hishallyi.github.io/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" title="后端开发笔记">http://hishallyi.github.io/2024/05/05/后端开发笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Java/" rel="tag"># Java</a>
               <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
@@ -671,76 +720,203 @@
 
         
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2023/12/31/%E9%9A%8F%E7%AC%94/" rel="prev" title="随笔-跨年当天的胡思乱想">
-                  <i class="fa fa-angle-left"></i> 随笔-跨年当天的胡思乱想
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2024/05/05/Hexo%E5%BB%BA%E7%AB%99%E7%AC%94%E8%AE%B0/" rel="next" title="Hexo建站笔记">
-                  Hexo建站笔记 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/31/%E9%9A%8F%E7%AC%94/" rel="prev" title="随笔-跨年当天的胡思乱想">
+      <i class="fa fa-chevron-left"></i> 随笔-跨年当天的胡思乱想
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/05/05/Hexo%E5%BB%BA%E7%AB%99%E7%AC%94%E8%AE%B0/" rel="next" title="Hexo建站笔记">
+      Hexo建站笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
   </article>
-</div>
+  
+  
+  
 
 
 
+          </div>
+          
 
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="copyright">
-    &copy; 
-    <span itemprop="copyrightYear">2024</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">Hishallyi</span>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
   </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot"><span class="nav-text">SpringBoot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86"><span class="nav-text">常用知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8E%A7%E5%88%B6%E5%99%A8Controller"><span class="nav-text">1. 控制器Controller</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E6%98%A0%E5%B0%84"><span class="nav-text">1. 路由映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-text">2. 参数传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="nav-text">3. 数据响应</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E8%AE%BF%E9%97%AE"><span class="nav-text">3.1 静态资源访问</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-SpringBoot%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 SpringBoot实现文件上传功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-text">3.3 拦截器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Swagger"><span class="nav-text">2. Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Swagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90Web-API%E6%96%87%E6%A1%A3"><span class="nav-text">使用Swagger自动生成Web API文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AESwagger"><span class="nav-text">配置Swagger</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Swagger%E8%BF%9B%E8%A1%8C%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95"><span class="nav-text">使用Swagger进行接口测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swagger%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">Swagger常用注解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%83%AD%E9%83%A8%E7%BD%B2"><span class="nav-text">开发环境热部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE"><span class="nav-text">系统配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-text">Mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8XML%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84SQL%E5%91%BD%E4%BB%A4"><span class="nav-text">调用XML文件中的SQL命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%94%A8%E6%B3%95%E5%92%8C%E8%AE%BE%E7%BD%AE"><span class="nav-text">常用用法和设置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDEA%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-text">IDEA常用快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0"><span class="nav-text">1. 快速生成基本函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90main%E5%87%BD%E6%95%B0"><span class="nav-text">2. 快速生成main函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E5%A4%9A%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-text">3. 快速生成多行注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90print%E8%AF%AD%E5%8F%A5"><span class="nav-text">4. 快速生成print语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86"><span class="nav-text">开发知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#POLO%E5%8F%8A%E5%85%B6%E8%BD%AC%E6%8D%A2-PO%E3%80%81DO%E3%80%81DTO%E3%80%81VO"><span class="nav-text">POLO及其转换-PO、DO、DTO、VO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E6%8B%AC"><span class="nav-text">概括</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB"><span class="nav-text">知识点汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP"><span class="nav-text">AOP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E6%B1%87%E6%80%BB"><span class="nav-text">注解汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%8E%9F%E7%94%9F%E6%B3%A8%E8%A7%A3"><span class="nav-text">Java原生注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Override"><span class="nav-text">@Override</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E6%A1%86%E6%9E%B6%E6%B3%A8%E8%A7%A3"><span class="nav-text">Spring框架注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Autowired%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="nav-text">@Autowired：自动装配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component"><span class="nav-text">@Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component-%E6%B3%A8%E8%A7%A3"><span class="nav-text">@Component 注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Autowired-%E6%B3%A8%E8%A7%A3"><span class="nav-text">@Autowired 注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ExceptionHandler"><span class="nav-text">@ExceptionHandler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RestControllerAdvice"><span class="nav-text">@RestControllerAdvice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-text">Mybatis相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mapper"><span class="nav-text">@Mapper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lombok%E5%BA%93%E6%B3%A8%E8%A7%A3"><span class="nav-text">Lombok库注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data"><span class="nav-text">@Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Slf4j"><span class="nav-text">@Slf4j@</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-text">Controller相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RestController"><span class="nav-text">@RestController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PathVariable"><span class="nav-text">@PathVariable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mapping%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-text">Mapping相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestMapping"><span class="nav-text">@RequestMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestBody"><span class="nav-text">@RequestBody</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swagger%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-text">Swagger相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Api"><span class="nav-text">@Api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiOperation"><span class="nav-text">@ApiOperation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModel"><span class="nav-text">@ApiModel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModelProperty"><span class="nav-text">@ApiModelProperty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-text">异常相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ExceptionHandler-1"><span class="nav-text">@ExceptionHandler</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E8%AF%AD%E6%B3%95"><span class="nav-text">Java语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E8%AF%AD%E6%B3%95%E5%92%8C%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="nav-text">泛型语法和机制：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-text">泛型原理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-text">自定义泛型示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3Java%E6%B3%A8%E8%A7%A3%E6%9C%BA%E5%88%B6"><span class="nav-text">详解Java注解机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3"><span class="nav-text">详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-text">注解机制实现的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="nav-text">详解Java反射机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%EF%BC%9A"><span class="nav-text">Java反射机制的主要组成部分：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-text">反射的基本用法示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%9A"><span class="nav-text">注意事项：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E8%AE%B0%E5%BD%95"><span class="nav-text">经典记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E6%89%BE%E5%AD%A9%E5%AD%90%E6%95%B0%E9%87%8F"><span class="nav-text">递归查找孩子数量</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hishallyi"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Hishallyi</p>
+  <div class="site-description" itemprop="description">海小逸的小天地</div>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hishallyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hishallyi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:haikun4515@163.com" title="E-Mail → mailto:haikun4515@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
   </div>
+
+
+
+      </div>
 
     </div>
-  </footer>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hishallyi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
   </div>
-  <div class="sidebar-dimmer"></div>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
-
-  
-
-
 
 
 
 
   
+<script src="/js/local-search.js"></script>
 
 
 
 
+
+
+
+
+
+
+
+
+
+  
+
+  
 
 </body>
 </html>

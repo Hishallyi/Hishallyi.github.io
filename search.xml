@@ -1,0 +1,1702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>MySQL学习笔记</title>
+    <url>/2024/05/06/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>总结MySQL数据库知识</p>
+<span id="more"></span>
+
+<h1 id="数据库基础"><a href="#数据库基础" class="headerlink" title="数据库基础"></a>数据库基础</h1><h2 id="一、数据库查询"><a href="#一、数据库查询" class="headerlink" title="一、数据库查询"></a>一、数据库查询</h2><p>关系也就是表，可以把对关系的运算看作对于一张数据库表的查询操作，对于关系的运算也即对表中某些行列的操作</p>
+<p>传统的集合运算符：并（union）、差（except）、交、笛卡尔积</p>
+<p>专门的关系运算符：选择、投影、连接、除法</p>
+<h3 id="（一）选择"><a href="#（一）选择" class="headerlink" title="（一）选择"></a>（一）选择</h3><p>选择数据库表中符合条件的<code>行</code>，即选择满足条件的元组，一般用$\sigma$表示</p>
+<h3 id="（二）投影"><a href="#（二）投影" class="headerlink" title="（二）投影"></a>（二）投影</h3><p>选择关系中<code>列</code>的子集，即选择原表中的某几列属性，返回的是一个新的表，一般用$\pi$表示</p>
+<blockquote>
+<p>注意：投影结果中不应该包含重复行</p>
+</blockquote>
+<h3 id="（三）连接"><a href="#（三）连接" class="headerlink" title="（三）连接"></a>（三）连接</h3><p>连接用于连接多个表，使用 JOIN 关键字，并且条件语句使用 ON 而不是 WHERE。</p>
+<p>连接可以替换子查询，并且比子查询的效率一般会更快。</p>
+<p>可以用 AS 给列名、计算字段和表名取别名，给表名取别名是为了简化 SQL 语句以及连接相同表</p>
+<h4 id="1-内连接"><a href="#1-内连接" class="headerlink" title="1. 内连接"></a>1. 内连接</h4><ul>
+<li>等值连接</li>
+<li>非等值连接</li>
+</ul>
+<h4 id="2-外连接"><a href="#2-外连接" class="headerlink" title="2. 外连接"></a>2. 外连接</h4><ul>
+<li><p>左外连接</p>
+</li>
+<li><p>右外连接</p>
+</li>
+<li><p>全连接：左右两边舍弃的元组都保留</p>
+</li>
+</ul>
+<h4 id="3-交叉连接（笛卡尔积）"><a href="#3-交叉连接（笛卡尔积）" class="headerlink" title="3. 交叉连接（笛卡尔积）"></a>3. 交叉连接（笛卡尔积）</h4><h3 id="（四）除法"><a href="#（四）除法" class="headerlink" title="（四）除法"></a>（四）除法</h3><h2 id="二、分组"><a href="#二、分组" class="headerlink" title="二、分组"></a>二、分组</h2><p>关键字：GROUP BY</p>
+<p>将具有相同数据值的行放在同一组中</p>
+<p>用HAVING过滤分组，用ORDER BY可以按照汇总字段进行排序</p>
+<p><strong>分组规定：</strong></p>
+<ul>
+<li>GROUP BY 子句出现在 WHERE 子句之后，ORDER BY 子句之前；</li>
+<li><strong>除了汇总字段外，SELECT 语句中的每一字段都必须在 GROUP BY 子句中给出；</strong></li>
+<li>NULL 的行会单独分为一组；</li>
+<li>大多数 SQL 实现不支持 GROUP BY 列具有可变长度的数据类型。</li>
+</ul>
+<h1 id="MySQL安装配置"><a href="#MySQL安装配置" class="headerlink" title="MySQL安装配置"></a>MySQL安装配置</h1><h2 id="Windows安装"><a href="#Windows安装" class="headerlink" title="Windows安装"></a>Windows安装</h2><p>安装好MySQL数据库之后，进行my.ini初始化文件的配置，创建环境变量，以管理员身份打开命令提示符cmd，进入mysql安装路径的bin目录下</p>
+<blockquote>
+<p>管理员身份打开cmd，并在mysql安装目录的bin目录下按顺序执行下面的命令</p>
+</blockquote>
+<ol>
+<li>按照前期配置的my.ini文件，初始化相关配置</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysqld <span class="comment">--initialize --console</span></span><br></pre></td></tr></table></figure>
+
+<p>这一步会随机生成一个默认密码，需要复制保存，以便在稍后启动服务时使用</p>
+<p><img src="/assets/image-20230918181729750.png" alt="image-20230918181729750"></p>
+<ol start="2">
+<li>安装mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysqld <span class="comment">--install mysql</span></span><br></pre></td></tr></table></figure>
+
+<p>安装成功会有安装成功的提示</p>
+<ol start="3">
+<li>启动mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">net <span class="keyword">start</span> mysql</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>登录mysql服务</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql <span class="operator">-</span>uroot <span class="operator">-</span>p</span><br></pre></td></tr></table></figure>
+
+<p>登录需要输入密码，输入刚才默认创建的密码，回车之后出现如图提示表示登录成功</p>
+<p><img src="/assets/image-20230918181558492.png" alt="image-20230918181558492"></p>
+<ol start="5">
+<li>修改默认密码</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;chk123&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>登录到mysql之后，需要修改密码，注意上面命令结尾处的分号不要省略，因为在mysql只能识别语句，不能识别命令，因此每个命令都需要加入分号才能被识别</p>
+<blockquote>
+<p>本地密码：chk123</p>
+</blockquote>
+<ol start="6">
+<li>在MySQL安装目录下的my.ini文件中配置MySQL端口号，默认端口号是3306</li>
+</ol>
+<h2 id="Linux安装"><a href="#Linux安装" class="headerlink" title="Linux安装"></a>Linux安装</h2><p>参考链接：<a href="http://t.csdnimg.cn/PWyoG">http://t.csdnimg.cn/PWyoG</a></p>
+<h1 id="MySQL命令总结"><a href="#MySQL命令总结" class="headerlink" title="MySQL命令总结"></a>MySQL命令总结</h1><h2 id="启动及关闭-MySQL-服务器"><a href="#启动及关闭-MySQL-服务器" class="headerlink" title="启动及关闭 MySQL 服务器"></a>启动及关闭 MySQL 服务器</h2><h3 id="Windows-系统下"><a href="#Windows-系统下" class="headerlink" title="Windows 系统下"></a>Windows 系统下</h3><p><strong>启动 MySQL 服务器:</strong></p>
+<p>1、<strong>通过 “服务” 管理工具：</strong> 打开”运行”对话框（Win + R），输入 <strong>services.msc</strong>，找到”MySQL”服务，右击选择”启动”。</p>
+<p>2、<strong>通过命令提示符：</strong> 打开命令提示符（以管理员身份），输入以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">net start mysql</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭MySQL服务器:</strong></p>
+<p>1、<strong>通过 “服务” 管理工具：</strong>同样打开”运行”对话框，输入 services.msc，找到 “MySQL” 服务，右击选择”停止”。</p>
+<p>2、<strong>通过命令提示符：</strong> 打开命令提示符（以管理员身份），输入以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">net stop mysql</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux-系统下"><a href="#Linux-系统下" class="headerlink" title="Linux 系统下"></a>Linux 系统下</h3><p><strong>1、启动 MySQL 服务：</strong></p>
+<p>使用 <strong>systemd</strong>命令（适用于大多数现代 Linux 发行版，如 Ubuntu、CentOS 等）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl start mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 <strong>service</strong> 命令（在一些较旧的发行版中）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service mysql start</span><br></pre></td></tr></table></figure>
+
+<p><strong>2、关闭 MySQL 服务：</strong></p>
+<p><strong>使用 systemd：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl stop mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service mysql stop</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、重启 MySQL 服务：</strong></p>
+<p><strong>使用 systemd：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
+
+<p><strong>4、检查 MySQL 服务状态：</strong></p>
+<p>使用 systemd命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+
+<p>使用 service 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service mysql status</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mac-OS-系统"><a href="#Mac-OS-系统" class="headerlink" title="Mac OS 系统"></a>Mac OS 系统</h3><p>启动 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server start</span><br></pre></td></tr></table></figure>
+
+<p>关闭 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server stop</span><br></pre></td></tr></table></figure>
+
+<p>重启 MySQL 服务：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server restart</span><br></pre></td></tr></table></figure>
+
+<p>检查 MySQL 服务状态：</p>
+<p>使用命令行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server status</span><br></pre></td></tr></table></figure>
+
+<p>以上命令中，mysql 可能会因为安装路径或版本的不同而有所变化。</p>
+<p>在 Mac OS 中，MySQL 的安装路径通常是 &#x2F;usr&#x2F;local&#x2F;mysql&#x2F;，因此启动和关闭 MySQL 服务需要使用这个路径下的 mysql.server 脚本。</p>
+<h2 id="管理MySQL的命令"><a href="#管理MySQL的命令" class="headerlink" title="管理MySQL的命令"></a>管理MySQL的命令</h2><p><strong>登录命令</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">只用用户名登录：mysql <span class="operator">-</span>u 用户名 <span class="operator">-</span>p</span><br><span class="line">用数据库ip地址登录：mysql <span class="operator">-</span>h 主机ip <span class="operator">-</span>u 用户名 <span class="operator">-</span>p</span><br><span class="line">    <span class="operator">-</span>h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;</span><br><span class="line">    <span class="operator">-</span>u : 所要登录的用户名;</span><br><span class="line">    <span class="operator">-</span>p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。</span><br><span class="line">    </span><br><span class="line">例如：</span><br><span class="line">mysql <span class="operator">-</span>u root <span class="operator">-</span>p</span><br><span class="line">然后需要输入用户root设置的密码才能登录成功</span><br></pre></td></tr></table></figure>
+
+<p><strong>退出命令</strong></p>
+<p>在MySQL命令行输入<code>exit</code>回车即可退出</p>
+<blockquote>
+<p>在登录mysql之后输入的mysql命令，记的加上分号，不然不是一条被识别的mysql语句，就无法别执行</p>
+<p><code>mysql&gt; mysql语句;</code></p>
+</blockquote>
+<ul>
+<li><p><strong>USE *数据库名*</strong> :<br>选择要操作的Mysql数据库，使用该命令后所有Mysql命令都只针对该数据库。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; use RUNOOB;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW DATABASES:</strong><br>列出 MySQL 数据库管理系统的数据库列表。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| RUNOOB             |</span><br><span class="line">| cdcol              |</span><br><span class="line">| mysql              |</span><br><span class="line">| onethink           |</span><br><span class="line">| performance_schema |</span><br><span class="line">| phpmyadmin         |</span><br><span class="line">| test               |</span><br><span class="line">| wecenter           |</span><br><span class="line">| wordpress          |</span><br><span class="line">+--------------------+</span><br><span class="line">10 rows in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW TABLES:</strong><br>显示指定数据库的所有表，使用该命令前需要使用 use 命令来选择要操作的数据库。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; use RUNOOB;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; SHOW TABLES;</span><br><span class="line">+------------------+</span><br><span class="line">| Tables_in_runoob |</span><br><span class="line">+------------------+</span><br><span class="line">| employee_tbl     |</span><br><span class="line">| runoob_tbl       |</span><br><span class="line">| tcount_tbl       |</span><br><span class="line">+------------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW COLUMNS FROM *数据表*:</strong><br>显示数据表的属性，属性类型，主键信息 ，是否为 NULL，默认值等其他信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW COLUMNS FROM runoob_tbl;</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">| Field           | Type         | Null | Key | Default | Extra |</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">| runoob_id       | int(11)      | NO   | PRI | NULL    |       |</span><br><span class="line">| runoob_title    | varchar(255) | YES  |     | NULL    |       |</span><br><span class="line">| runoob_author   | varchar(255) | YES  |     | NULL    |       |</span><br><span class="line">| submission_date | date         | YES  |     | NULL    |       |</span><br><span class="line">+-----------------+--------------+------+-----+---------+-------+</span><br><span class="line">4 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW INDEX FROM *数据表*:</strong><br>显示数据表的详细索引信息，包括PRIMARY KEY（主键）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW INDEX FROM runoob_tbl;</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| runoob_tbl |          0 | PRIMARY  |            1 | runoob_id   | A         |           2 |     NULL | NULL   |      | BTREE      |         |               |</span><br><span class="line">+------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SHOW TABLE STATUS [FROM db_name] [LIKE ‘pattern’] \G:</strong><br>该命令将输出Mysql数据库管理系统的性能及统计信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW TABLE STATUS  FROM RUNOOB;   # 显示数据库 RUNOOB 中所有表的信息</span><br><span class="line"></span><br><span class="line">mysql&gt; SHOW TABLE STATUS from RUNOOB LIKE &#x27;runoob%&#x27;;     # 表名以runoob开头的表的信息</span><br><span class="line">mysql&gt; SHOW TABLE STATUS from RUNOOB LIKE &#x27;runoob%&#x27;\G;   # 加上 \G，查询结果按列打印</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo建站笔记</title>
+    <url>/2024/05/05/Hexo%E5%BB%BA%E7%AB%99%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>我的Hexo建站笔记</p>
+<span id="more"></span>
+
+<h1 id="一、建站部署"><a href="#一、建站部署" class="headerlink" title="一、建站部署"></a>一、建站部署</h1><h2 id="Nodejs"><a href="#Nodejs" class="headerlink" title="Nodejs"></a>Nodejs</h2><p>下载安装配置Nodejs，<a href="https://nodejs.org/en/download">Nodejs官网</a>下载.msi后缀的安装包，参考网上的安装配置教程，在电脑中安装Nodejs</p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p>本地电脑需要配置Git</p>
+<p>同样的，<a href="https://git-scm.com/downloads">Git官网</a>下载安装包，参考网上的教程，在本地进行安装配置</p>
+<p>Git全局配置用户名和邮箱：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置全局用户名</span></span><br><span class="line">git config -g user.name 自定义的用户名</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置全局邮箱</span></span><br><span class="line">git config -g user.email 自己的邮箱</span><br></pre></td></tr></table></figure>
+
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>利用Github的GitHub Pages功能部署网站，免费易上手</p>
+<ol>
+<li>在Github创建<strong>公有仓库</strong>，仓库名为<code>账号名.github.io</code></li>
+</ol>
+<blockquote>
+<p>例如，我的Github账号为hishallyi，则创建仓库的名称就是<code>hishallyi.github.io</code></p>
+</blockquote>
+<ol start="2">
+<li>配置SSH公钥</li>
+</ol>
+<h2 id="Hexo建站"><a href="#Hexo建站" class="headerlink" title="Hexo建站"></a>Hexo建站</h2><h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><blockquote>
+<p>官网不再推荐全局安装</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装部署工具"><a href="#安装部署工具" class="headerlink" title="安装部署工具"></a>安装部署工具</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="发布部署三大步"><a href="#发布部署三大步" class="headerlink" title="发布部署三大步"></a>发布部署三大步</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 先clean，清理缓存</span></span><br><span class="line">hexo c</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 在生成静态文章</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3. 最后自动部署</span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、网站主题美化"><a href="#二、网站主题美化" class="headerlink" title="二、网站主题美化"></a>二、网站主题美化</h1><h2 id="下载网站主题"><a href="#下载网站主题" class="headerlink" title="下载网站主题"></a>下载网站主题</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone hexo主题的github地址 .\themes\主题名</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、写博客"><a href="#三、写博客" class="headerlink" title="三、写博客"></a>三、写博客</h1><h2 id="新建发布文章"><a href="#新建发布文章" class="headerlink" title="新建发布文章"></a>新建发布文章</h2><blockquote>
+<p>这类文章是创建编辑之后，运行<code>发布部署三大步</code>就会直接显示在博客网站中</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行下面命令之后会在本地博客项目目录的<span class="built_in">source</span>/_posts下创建一个Markdown文件</span></span><br><span class="line">hexo n &quot;自定义博客文章题目&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建草稿"><a href="#新建草稿" class="headerlink" title="新建草稿"></a>新建草稿</h2><blockquote>
+<p>这类文章是创建之后，只会存储在本地，运行<code>发布部署三大步</code>也不会在博客网站中显示</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行下面命令会在本地博客项目目录的<span class="built_in">source</span>/_drafts下创建一个Markdown文件</span></span><br><span class="line">hexo new draft &quot;自定义草稿文章题目&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布草稿</span></span><br><span class="line">hexo publish &quot;自定义草稿文章题目&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建页面"><a href="#新建页面" class="headerlink" title="新建页面"></a>新建页面</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">和前两种不同，运行下面命令会在<span class="built_in">source</span>文件夹内创建一个文件夹，与_posts，_drafts并列，文件夹里面有一个index.md文件</span></span><br><span class="line">hexo new page 页面名称</span><br></pre></td></tr></table></figure>
+
+<h2 id="文章摘要"><a href="#文章摘要" class="headerlink" title="文章摘要"></a>文章摘要</h2><p>一篇文章开头一段文字描述就是摘要，摘要和正文用 <code>&lt;!-- more --&gt;</code> 隔开，前后一定要有空行。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">Front Matter 部分</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">在心率管家默默无闻地上线了一年多之后，现在终于打算来好好聊聊关于手机摄像头测量心率的那些事。本文参考了很多前辈的文章，将在文末列出。</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">后面是正文部分，在主页看不到。</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端开发笔记</title>
+    <url>/2024/05/06/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>前端开发学习笔记</p>
+<span id="more"></span>
+
+<h1 id="网页标签HTML"><a href="#网页标签HTML" class="headerlink" title="网页标签HTML"></a>网页标签HTML</h1><h2 id="html常用的标签属性"><a href="#html常用的标签属性" class="headerlink" title="html常用的标签属性"></a>html常用的标签属性</h2><p>HTML 中常用的标签属性有很多，以下是其中一些常见的：</p>
+<ol>
+<li><p><strong>class</strong>: 为元素定义一个或多个类名，用于指定元素的样式。</p>
+</li>
+<li><p><strong>id</strong>: 为元素定义唯一标识符。</p>
+</li>
+<li><p><strong>style</strong>: 为元素指定内联样式。</p>
+</li>
+<li><p><strong>href</strong>: 定义超链接的目标 URL。</p>
+</li>
+<li><p><strong>src</strong>: 定义图像、脚本等资源的 URL。</p>
+</li>
+<li><p><strong>alt</strong>: 为图像指定替代文本。</p>
+</li>
+<li><p><strong>title</strong>: 为元素定义额外的信息（通常以工具提示的形式显示）。</p>
+</li>
+<li><p><strong>target</strong>: 定义超链接打开的目标窗口或框架。</p>
+</li>
+<li><p><strong>rel</strong>: 定义当前文档与链接文档之间的关系。</p>
+</li>
+<li><p><strong>type</strong>: 定义脚本或媒体资源的类型。</p>
+</li>
+<li><p><strong>name</strong>: 定义表单控件的名称。</p>
+</li>
+<li><p><strong>value</strong>: 定义表单控件的值。</p>
+</li>
+<li><p><strong>placeholder</strong>: 定义输入字段的预期值。</p>
+</li>
+<li><p><strong>readonly</strong>: 定义输入字段为只读。</p>
+</li>
+<li><p><strong>disabled</strong>: 定义输入字段为禁用状态。</p>
+</li>
+<li><p><strong>checked</strong>: 定义复选框或单选按钮是否默认选中。</p>
+</li>
+<li><p><strong>maxlength</strong>: 定义输入字段的最大字符数。</p>
+</li>
+<li><p><strong>min</strong> &#x2F; <strong>max</strong>: 定义输入字段的最小值和最大值。</p>
+</li>
+<li><p><strong>required</strong>: 定义输入字段是否为必填项。</p>
+</li>
+<li><p><strong>aria-</strong>*: 定义元素的可访问性属性，用于改善残障用户的网站体验。</p>
+</li>
+</ol>
+<p>这些是一些常见的 HTML 标签属性，但实际上 HTML 提供了更多的属性来控制元素的行为和外观。</p>
+<h2 id="html常用的样式属性"><a href="#html常用的样式属性" class="headerlink" title="html常用的样式属性"></a>html常用的样式属性</h2><p>在 CSS 中，可以使用各种属性来设置标签的样式。以下是一些常用的样式属性：</p>
+<ol>
+<li><strong>color</strong>: 设置文本颜色。</li>
+<li><strong>font-family</strong>: 设置字体系列。</li>
+<li><strong>font-size</strong>: 设置字体大小。</li>
+<li><strong>font-weight</strong>: 设置字体粗细。</li>
+<li><strong>font-style</strong>: 设置字体样式（如斜体）。</li>
+<li><strong>text-decoration</strong>: 设置文本装饰（如下划线、删除线等）。</li>
+<li><strong>text-align</strong>: 设置文本水平对齐方式。</li>
+<li><strong>line-height</strong>: 设置行高。</li>
+<li><strong>letter-spacing</strong>: 设置字符间距。</li>
+<li><strong>word-spacing</strong>: 设置单词间距。</li>
+<li><strong>background-color</strong>: 设置背景颜色。</li>
+<li><strong>background-image</strong>: 设置背景图像。</li>
+<li><strong>background-size</strong>: 设置背景图像的大小。</li>
+<li><strong>background-position</strong>: 设置背景图像的位置。</li>
+<li><strong>background-repeat</strong>: 设置背景图像的重复方式。</li>
+<li><strong>padding</strong>: 设置内边距。</li>
+<li><strong>margin</strong>: 设置外边距。</li>
+<li><strong>border</strong>: 设置边框。</li>
+<li><strong>border-radius</strong>: 设置边框的圆角。</li>
+<li><strong>box-shadow</strong>: 设置阴影效果。</li>
+<li><strong>display</strong>: 设置元素的显示方式（如块级、内联、隐藏等）。</li>
+<li><strong>width</strong> &#x2F; <strong>height</strong>: 设置元素的宽度和高度。</li>
+<li><strong>position</strong>: 设置元素的定位方式（如相对定位、绝对定位等）。</li>
+<li><strong>top</strong> &#x2F; <strong>right</strong> &#x2F; <strong>bottom</strong> &#x2F; <strong>left</strong>: 设置元素的定位偏移量。</li>
+<li><strong>float</strong>: 设置元素的浮动方式。</li>
+<li><strong>clear</strong>: 清除浮动。</li>
+<li><strong>overflow</strong>: 设置溢出内容的处理方式。</li>
+<li><strong>z-index</strong>: 设置元素的层叠顺序。</li>
+<li><strong>cursor</strong>: 设置鼠标指针样式。</li>
+<li><strong>transition</strong>: 设置过渡效果。</li>
+<li><strong>animation</strong>: 设置动画效果。</li>
+</ol>
+<p>这些是常用的样式属性，可以帮助你控制 HTML 元素的外观和布局。</p>
+<h2 id="标签位置的属性"><a href="#标签位置的属性" class="headerlink" title="标签位置的属性"></a>标签位置的属性</h2><p>设置标签位置的样式属性通常用于控制元素的布局和定位。以下是一些常用的样式属性：</p>
+<ol>
+<li><p><strong>position</strong>: 定义元素的定位方式，常见的取值有：</p>
+<ul>
+<li><code>static</code>: 默认定位方式，元素按照文档流进行排列。</li>
+<li><code>relative</code>: 相对定位，元素相对于其自身在文档流中的位置进行定位，可以通过 <code>top</code>、<code>right</code>、<code>bottom</code>、<code>left</code> 属性进行微调。</li>
+<li><code>absolute</code>: 绝对定位，元素相对于其最近的非 <code>static</code> 定位的祖先元素进行定位，如果没有则相对于初始包含块进行定位。</li>
+<li><code>fixed</code>: 固定定位，元素相对于视口进行定位，即使页面滚动也不会改变其位置。</li>
+<li><code>sticky</code>: 粘性定位，元素根据用户的滚动位置在父容器内进行定位，直到滚动到某个阈值位置后才固定在该位置。</li>
+</ul>
+</li>
+<li><p><strong>top</strong> &#x2F; <strong>right</strong> &#x2F; <strong>bottom</strong> &#x2F; <strong>left</strong>: 用于绝对定位和相对定位元素的定位偏移量。</p>
+</li>
+<li><p><strong>margin</strong>: 设置元素的外边距，控制元素与其相邻元素之间的距离。</p>
+</li>
+<li><p><strong>padding</strong>: 设置元素的内边距，控制元素内容与边框之间的距离。</p>
+</li>
+<li><p><strong>float</strong>: 定义元素的浮动方式，使其脱离文档流并向左或向右浮动，常用于实现多列布局。</p>
+</li>
+<li><p><strong>clear</strong>: 清除浮动，指定元素在哪个方向上不允许浮动元素。</p>
+</li>
+<li><p><strong>display</strong>: 设置元素的显示方式，常见取值有：</p>
+<ul>
+<li><code>block</code>: 将元素显示为块级元素，即单独占据一行。</li>
+<li><code>inline</code>: 将元素显示为内联元素，即与其它内联元素在同一行上。</li>
+<li><code>inline-block</code>: 将元素显示为内联块级元素，即保持内联元素的行内特性同时具备块级元素的特点。</li>
+</ul>
+</li>
+<li><p><strong>flexbox 相关属性</strong>：用于弹性布局，例如 <code>display: flex</code>、<code>justify-content</code>、<code>align-items</code> 等。</p>
+</li>
+<li><p><strong>grid 相关属性</strong>：用于网格布局，例如 <code>display: grid</code>、<code>grid-template-columns</code>、<code>grid-template-rows</code> 等。</p>
+</li>
+</ol>
+<p>这些样式属性可以根据需要结合使用，实现各种复杂的页面布局。</p>
+<h2 id="基本标签"><a href="#基本标签" class="headerlink" title="基本标签"></a>基本标签</h2><p>标题标签：<code>&lt;h1&gt;&lt;/h1&gt;</code></p>
+<p>段落标签：<code>&lt;p&gt;&lt;/p&gt;</code></p>
+<p>空格：<code>&amp;nbsp</code></p>
+<p>换行标签：<code>&lt;br/&gt;</code></p>
+<p>水平线标签：<code>&lt;hr/&gt;</code></p>
+<p>字体样式标签：<code>&lt;strong&gt;粗体&lt;/strong&gt;</code>、<code>&lt;em&gt;斜体&lt;/em&gt;</code></p>
+<p>注释：<!-- --></p>
+<p>特殊符号：<code>通过&amp;加一个字母在下拉选项框选择</code>   例如：版权符号@是用<code>&amp;copy</code>表示</p>
+<h2 id="图像标签"><a href="#图像标签" class="headerlink" title="图像标签"></a>图像标签</h2><p><code>&lt;img src=&quot;图像地址&quot; alt=&quot;图片可替代文字&quot; title=&quot;鼠标悬停文字&quot; width=图片的宽 height=图片高度&gt;</code></p>
+<p>其中src和alt属性是必填的</p>
+<h2 id="超链接标签"><a href="#超链接标签" class="headerlink" title="超链接标签"></a>超链接标签</h2><p><code>&lt;a herf=&quot;网页链接&quot; target=&quot;&quot;&gt;赋予链接的文字&lt;/a&gt;</code></p>
+<p>herf：必填，表示要跳转到哪个页面</p>
+<p>target：表示窗口在哪里打开</p>
+<p>​		_blank：在新标签页打开</p>
+<p>​		_self：在当前标签页打开</p>
+<h3 id="锚链接"><a href="#锚链接" class="headerlink" title="锚链接"></a>锚链接</h3><p>使用name作为标记：<code>&lt;a name=&quot;top&quot;&gt;顶部&lt;/a&gt;</code></p>
+<p>然后再页面中某处通过#跳转到标记处：<code>&lt;a herf=&quot;井号前面可以添加页面链接#top&quot;&gt;点击跳转至顶部&lt;/a&gt;</code></p>
+<h3 id="功能性链接"><a href="#功能性链接" class="headerlink" title="功能性链接"></a>功能性链接</h3><p>邮件链接：<code>&lt;a mailto:邮箱号&gt;点击联系邮箱&lt;/a&gt;</code></p>
+<p>QQ链接：<code>&lt;a&gt;&lt;/a&gt;</code></p>
+<h2 id="列表标签"><a href="#列表标签" class="headerlink" title="列表标签"></a>列表标签</h2><ol>
+<li>有序列表：<code>&lt;ol&gt;&lt;/ol&gt;</code></li>
+</ol>
+<ul>
+<li>无序列表：<code>&lt;ul&gt;&lt;/ul&gt;</code></li>
+</ul>
+<p>中间都是用<code>&lt;li&gt;列表中每行内容&lt;/li&gt;</code>标签来指定每行内容的</p>
+<p>自定义列表：<code>&lt;dl&gt;&lt;/dl&gt;</code>，自定义列表中间有两种标签，分别是<code>&lt;dt&gt;&lt;/dt&gt;</code>和<code>&lt;dd&gt;&lt;/dd&gt;</code></p>
+<p>dl：标签；dt：列表名称；dd：列表内容</p>
+<p>自定义列表一般用在网页底部</p>
+<h2 id="表格标签"><a href="#表格标签" class="headerlink" title="表格标签"></a>表格标签</h2><!-- 表格标签table -->
+
+<!-- 行tr -->
+
+<!-- 列td -->
+
+<!-- 三行四列的表格 -->
+
+<!-- 跨行使用td的属性：colspa=4 跨列使用td的属性：rowspan=2 -->
+
+<table border="5px">
+    <tr>
+        <td>1-1</td>
+        <td>1-2</td>
+        <td>1-3</td>
+        <td>1-4</td>
+    </tr>
+    <tr>
+        <td>2-1</td>
+        <td>2-2</td>
+        <td>2-3</td>
+        <td>2-4</td>
+    </tr>
+    <tr>
+        <td>3-1</td>
+        <td>3-2</td>
+        <td>3-3</td>
+        <td>3-4</td>
+    </tr>
+</table>
+
+
+<h2 id="媒体元素"><a href="#媒体元素" class="headerlink" title="媒体元素"></a>媒体元素</h2><p>视频标签：<code>&lt;video src=&quot;&quot; controls autoplay&gt;&lt;\video&gt;</code></p>
+<p>音频标签：<code>&lt;audio arc=&quot;&quot; controls autoplay&gt;&lt;/audio&gt;</code></p>
+<h2 id="网页结构分析"><a href="#网页结构分析" class="headerlink" title="网页结构分析"></a>网页结构分析</h2><img src="assets/image-20240201151439812.png" alt="image-20240201151439812" style="zoom: 25%;" />
+
+<img src="assets/image-20240201151539172.png" alt="image-20240201151539172" style="zoom: 50%;" />
+
+<h2 id="iframe内联框架"><a href="#iframe内联框架" class="headerlink" title="iframe内联框架"></a>iframe内联框架</h2><p>在当前页面的某个区域显示另外的网站页面，相当于当前网页的一个容器</p>
+<p><code>&lt;iframe src=&quot;网站地址&quot; name=&quot;&quot; frameborder=&quot;0&quot; wifth=&quot;1000px&quot; height=&quot;800px&quot;&gt;&lt;/iframe&gt;</code></p>
+<h2 id="表单post和get提交"><a href="#表单post和get提交" class="headerlink" title="表单post和get提交"></a>表单post和get提交</h2><h3 id="表单form"><a href="#表单form" class="headerlink" title="表单form"></a>表单form</h3><ul>
+<li>action：表单提交的位置， 可以是网站，也可以是一个请求处理地址</li>
+<li>method：get | post<ul>
+<li>get提交：可以在提交后的页面url中看到被提交的信息，不安全但是高效</li>
+<li>post提交：比较安全，可以传输大文件</li>
+</ul>
+</li>
+</ul>
+<img src="assets/image-20240201152425710.png" alt="image-20240201152425710" style="zoom: 25%;" />
+
+<h3 id="表单元素格式"><a href="#表单元素格式" class="headerlink" title="表单元素格式"></a>表单元素格式</h3><img src="assets/image-20240201153302430.png" alt="image-20240201153302430" style="zoom:25%;" />
+
+<h4 id="单选框"><a href="#单选框" class="headerlink" title="单选框"></a>单选框</h4><p><input type="radio" value="boy" name="sex"/>boy</p>
+<p><input type="radio" value="girl" name="sex"/>girl</p>
+<h4 id="多选框"><a href="#多选框" class="headerlink" title="多选框"></a>多选框</h4><p><input type="checkbox" value="" name="" checked></input></p>
+<h4 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h4><input type="button" name="" value="">
+
+<h4 id="下拉框"><a href="#下拉框" class="headerlink" title="下拉框"></a>下拉框</h4><select name="列表名称">
+    <option value="吃的">中国</option>
+    <option value="喝的">美国</option>
+    <option value="喝的" selected>瑞士</option>
+    <option value="喝的">印度</option>
+</select>
+
+
+<h4 id="文本域"><a href="#文本域" class="headerlink" title="文本域"></a>文本域</h4><textarea name="textarea" cols="10px" rows="5px">文本内容</textarea>
+
+<h4 id="文件域"><a href="#文件域" class="headerlink" title="文件域"></a>文件域</h4><input type="file" name="files"/>
+
+<h2 id="输入框标签"><a href="#输入框标签" class="headerlink" title="输入框标签"></a>输入框标签</h2><p><code>&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;修饰词</code></p>
+<p>输入框便签是自闭合标签，一般放在段落标签内，type属性的可选值有很多种</p>
+<h2 id="表单初级验证"><a href="#表单初级验证" class="headerlink" title="表单初级验证"></a>表单初级验证</h2><p>常用方式：</p>
+<ul>
+<li>placeholder：input属性，可以在输入框中提供提示词</li>
+<li>required：是input的单独属性，不需要赋值，为非空判断，表示输入框不能为空</li>
+<li>pattern：input属性，传入一个正则表达式来赋值，</li>
+</ul>
+<h2 id="盒子模型"><a href="#盒子模型" class="headerlink" title="盒子模型"></a>盒子模型</h2><p>盒子：页面中所有的元素，都可以看作是一个<strong>盒子</strong>，由盒子将页面中的元素包含在一个矩形区域内，通过盒子的视角更方便的进行页面布局</p>
+<p>盒子模型的组成：内容区域(content)、内边距区域(padding)、边框区域(border)、外边距区域(margin)</p>
+<img src="assets/image-20240305214444776.png" alt="image-20240305214444776" style="zoom:80%;" />
+
+<p>盒子不包含外边距区域margin，只包含边框border内的区域</p>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><p>行内样式：在每个行内用style属性指定样式</p>
+<p>内部样式：在head标签内用<style></style>指定的样式</p>
+<p>外部样式：在head标签内用<link rel="stylesheet" src="css文件地址"/>来指定样式</p>
+<p><strong>优先级：就近原则，谁距离代码更近按照谁的样式来显示</strong></p>
+<h2 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h2><p>选择器不遵循就近原则，而是id选择器&gt;类选择器&gt;标签选择器</p>
+<p>基本选择器</p>
+<ol>
+<li><p>标签选择器：会选择到这个页面上所有这个标签的元素</p>
+<p><code>h1</code>{</p>
+<p>​	color:#122342;</p>
+<p>}</p>
+</li>
+<li><p>类选择器（相同类class）：可以多个标签归类，是同一个类</p>
+<p><code>.类的名称</code>{</p>
+<p>​	color:#123456;</p>
+<p>}</p>
+</li>
+<li><p>id选择器（全局唯一，每个标签仅只能有一个id，不能重复）</p>
+<p><code>#id名称</code>{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+</li>
+</ol>
+<h3 id="层次选择器"><a href="#层次选择器" class="headerlink" title="层次选择器"></a>层次选择器</h3><ol>
+<li><p>后代选择器：某个元素的后面所有后代元素都会被选择</p>
+<p><code>body p</code>{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+</li>
+<li><p>子选择器（只有一代，儿子这一代的元素被选择）</p>
+<p><code>body&gt;p</code>{</p>
+<p>​     colors:#123456;</p>
+<p>}</p>
+</li>
+<li><p>相邻兄弟选择器   同辈（下面的一个相邻同级标签被选择，<strong>只有一个</strong>）</p>
+</li>
+</ol>
+<p>​		<code>.id名称/类名称 + p</code>{</p>
+<p>​			colors:#123456;</p>
+<p>​		}</p>
+<ol start="4">
+<li><p>通用选择器（通用兄弟选择器，当前选中元素的向下的所有兄弟的元素）</p>
+<p><code>.id名称/类名称~p</code>{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+</li>
+</ol>
+<h3 id="结构伪类选择器（针对结构）"><a href="#结构伪类选择器（针对结构）" class="headerlink" title="结构伪类选择器（针对结构）"></a>结构伪类选择器（针对结构）</h3><p>加上冒号：的都是伪类选择器</p>
+<blockquote>
+<p>选中第一个元素</p>
+</blockquote>
+<p>ul li:first_child{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+<blockquote>
+<p>选中p元素父级的第一个元素，并且是当前元素才生效，如果第一个不是p元素就不会生效，按顺序选择</p>
+</blockquote>
+<p>p:nth-child(1){</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+<blockquote>
+<p>选中p元素父级的第一个元素，按类型选择</p>
+</blockquote>
+<p>p:nth-of-type(1){</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+<h3 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h3><blockquote>
+<p>选择存在id属性的元素</p>
+</blockquote>
+<p>a[id]{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+<blockquote>
+<p>选择id值为style的元素</p>
+</blockquote>
+<p>a[id&#x3D;style]{</p>
+<p>​	colors:#123456;</p>
+<p>}</p>
+<p>并且属性选择器也可以与类选择器相结合，并且也可以用正则表达式来构建id或者class的属性值，进行选择</p>
+<h2 id="美化网页元素"><a href="#美化网页元素" class="headerlink" title="美化网页元素"></a>美化网页元素</h2><h3 id="span标签"><a href="#span标签" class="headerlink" title="span标签"></a>span标签</h3><p>重点要突出的字用span标签套出来，然后对span标签提供样式</p>
+<h3 id="字体样式"><a href="#字体样式" class="headerlink" title="字体样式"></a>字体样式</h3><p>font：统一定义字体样式</p>
+<p>font-family：字体属性</p>
+<p>font-size：字体大小</p>
+<p>font-weight：字体粗细</p>
+<p>color：字体颜色</p>
+<h3 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h3><p>text-align：文字位置</p>
+<p>text-indent：2em，表示首行缩进</p>
+<h3 id="超链接伪类"><a href="#超链接伪类" class="headerlink" title="超链接伪类"></a>超链接伪类</h3><blockquote>
+<p>指定鼠标悬浮时文字所变颜色</p>
+</blockquote>
+<p>a:hover{</p>
+<p>​		color:RGB颜色; </p>
+<p>}</p>
+<blockquote>
+<p>鼠标按住未释放的颜色</p>
+</blockquote>
+<p>a:active{</p>
+<p>​	color:RGB颜色;</p>
+<p>}</p>
+<blockquote>
+<p>指定超链接不要下划线</p>
+</blockquote>
+<p>a{</p>
+<p>​	text-decoration:none; &#x2F;&#x2F;去除超链接的下划线</p>
+<p>}</p>
+<h1 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h1><h2 id="一、Vue核心"><a href="#一、Vue核心" class="headerlink" title="一、Vue核心"></a>一、Vue核心</h2><h3 id="1-模板语法"><a href="#1-模板语法" class="headerlink" title="1. 模板语法"></a>1. 模板语法</h3><ul>
+<li>插值语法：用于解析标签体内容</li>
+<li>指令语法：用于解析标签</li>
+</ul>
+<h3 id="2-数据绑定"><a href="#2-数据绑定" class="headerlink" title="2. 数据绑定"></a>2. 数据绑定</h3><p><strong>数据存放于Vue实例的data属性中</strong></p>
+<ul>
+<li>Vue中有2种数据绑定的方式：<ol>
+<li>单向绑定（<code>v-bind</code>）：数据只能从data流向页面</li>
+<li>双向绑定（<code>v-model</code>）：数据不仅能从data流向页面，还可以从页面流向data</li>
+</ol>
+</li>
+<li>备注：<ol>
+<li>双向绑定一般都应用在表单类元素上（如：<code>&lt;input&gt;</code>、<code>&lt;select&gt;</code>、<code>&lt;textarea&gt;</code>等）</li>
+<li><code>v-model:value</code>可以简写为<code>v-model</code>，因为<code>v-model</code>默认收集的就是value值</li>
+</ol>
+</li>
+</ul>
+<h3 id="3-MVVM模型"><a href="#3-MVVM模型" class="headerlink" title="3. MVVM模型"></a>3. MVVM模型</h3><img src="assets/image-20240304151414116.png" alt="image-20240304151414116" style="zoom:50%;" />
+
+<p>M：模型（Model），data中的数据</p>
+<p>V：视图（View），模板代码</p>
+<p>VM：视图模型（View Model），Vue实例</p>
+<h3 id="4-事件处理"><a href="#4-事件处理" class="headerlink" title="4. 事件处理"></a>4. 事件处理</h3><p>事件即Vue实例中method属性中存储的函数，事件绑定即通过与DOM对象交互时来调用method属性中的函数</p>
+<h4 id="事件绑定"><a href="#事件绑定" class="headerlink" title="事件绑定"></a>事件绑定</h4><ol>
+<li>使用<code>v-on:xxx</code>或<code>@xxx</code>绑定事件，其中xxx是事件名</li>
+<li>事件的回调需要配置在methods对象中，最终会在vm上</li>
+<li>methods中配置的函数，&#x3D;&#x3D;不要用箭头函数！&#x3D;&#x3D;否则this就不是vm了</li>
+<li>methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象</li>
+<li><code>@click=&quot;demo&quot;</code>和<code>@click=&quot;demo($event)&quot;</code>效果一致，但后者可以传参</li>
+</ol>
+<h4 id="事件修饰符"><a href="#事件修饰符" class="headerlink" title="事件修饰符"></a>事件修饰符</h4><p>Vue中的事件修饰符：</p>
+<ol>
+<li>prevent：阻止默认事件（常用）</li>
+<li>stop：阻止事件冒泡（常用）</li>
+<li>once：事件只触发一次（常用）</li>
+<li>capture：使用事件的捕获模式</li>
+<li>self：只有<code>event.target</code>是当前操作的元素时才触发事件</li>
+<li>passive：事件的默认行为立即执行，无需等待事件回调执行完毕</li>
+</ol>
+<blockquote>
+<p>修饰符可以连续写，比如可以这么用：<code>@click.prevent.stop=&quot;showInfo&quot;</code></p>
+</blockquote>
+<h3 id="5-计算属性computed"><a href="#5-计算属性computed" class="headerlink" title="5. 计算属性computed"></a>5. 计算属性computed</h3><p>计算属性是一种根据其它属性计算所得到的属性，它的值是根据其依赖的数据动态计算得出的，只有在它的相关依赖发生改变时，才会重新求值。计算属性是基于它们的依赖进行缓存的，只有相关依赖发生改变时，它们才会重新求值。</p>
+<p>Vue实例中的computed对象，其中包含两个函数get()和set()</p>
+<ul>
+<li>计算属性：<ul>
+<li>定义：要用的属性不存在，需要通过已有属性计算得来。</li>
+<li>原理：底层借助了<code>Objcet.defineproperty()</code>方法提供的getter和setter。</li>
+<li>get函数什么时候执行？<ol>
+<li>初次读取时会执行一次</li>
+<li>当依赖的数据发生改变时会被再次调用</li>
+</ol>
+</li>
+<li>优势：与methods实现相比，内部有缓存机制（复用），效率更高，调试方便</li>
+</ul>
+</li>
+<li>备注：<ul>
+<li>计算属性最终会出现在vm上，直接读取使用即可</li>
+<li><strong>如果计算属性要被修改，那必须写set函数去响应修改，且set中要引起计算时依赖的数据发生改变</strong></li>
+<li>如果计算属性确定不考虑修改，可以使用计算属性的简写形式</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-监视属性watch"><a href="#6-监视属性watch" class="headerlink" title="6. 监视属性watch"></a>6. 监视属性watch</h3><p>监视属性允许你在数据变化时执行异步或开销较大的操作。它类似于一个观察者，可以监听数据的变化并执行相应的操作。</p>
+<p>使用方法：</p>
+<p>在 Vue 组件中，你可以通过 <code>watch</code> 对象来定义监视属性。例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">firstName</span>: <span class="string">&#x27;John&#x27;</span>,</span><br><span class="line">      <span class="attr">lastName</span>: <span class="string">&#x27;Doe&#x27;</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">watch</span>: &#123;</span><br><span class="line">    <span class="title function_">firstName</span>(<span class="params">newVal, oldVal</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;firstName changed from &#x27;</span> + oldVal + <span class="string">&#x27; to &#x27;</span> + newVal);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">lastName</span>(<span class="params">newVal, oldVal</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;lastName changed from &#x27;</span> + oldVal + <span class="string">&#x27; to &#x27;</span> + newVal);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="监视属性watch"><a href="#监视属性watch" class="headerlink" title="监视属性watch"></a>监视属性watch</h4><ol>
+<li>当被监视的属性变化时，回调函数自动调用，进行相关操作</li>
+<li>监视的属性必须存在，才能进行监视</li>
+<li>监视有两种写法：<ol>
+<li>创建Vue时传入watch配置</li>
+<li>通过<code>vm.$watch</code>监视</li>
+</ol>
+</li>
+</ol>
+<h4 id="深度监视"><a href="#深度监视" class="headerlink" title="深度监视"></a>深度监视</h4><ol>
+<li>Vue中的watch默认不监测对象内部值的改变（一层）</li>
+<li>在watch中配置<code>deep:true</code>可以监测对象内部值的改变（多层）</li>
+</ol>
+<p>备注：</p>
+<ol>
+<li>Vue自身可以监测对象内部值的改变，但Vue提供的watch默认不可以</li>
+<li>使用watch时根据监视数据的具体结构，决定是否采用深度监视</li>
+</ol>
+<h4 id="computed和watch之间的区别"><a href="#computed和watch之间的区别" class="headerlink" title="computed和watch之间的区别"></a>computed和watch之间的区别</h4><ul>
+<li>computed能完成的功能，watch都可以完成</li>
+<li>watch能完成的功能，computed不一定能完成，例如：watch可以进行异步操作</li>
+</ul>
+<p>两个重要的小原则：</p>
+<ol>
+<li>所有被Vue管理的函数，最好写成普通函数，这样this的指向才是vm 或 组件实例对象</li>
+<li>所有不被Vue所管理的函数（定时器的回调函数、ajax的回调函数等、Promise的回调函数），最好写成箭头函数，这样this的指向才是vm 或 组件实例对象。</li>
+</ol>
+<p>区别：</p>
+<ol>
+<li><p><strong>实时性</strong>：计算属性是基于它们的依赖进行缓存的，只有相关依赖发生改变时，它们才会重新求值；而监视属性允许你在数据变化时执行自定义的操作，它没有缓存值，每当被监视的数据变化时，相应的操作会被执行。</p>
+</li>
+<li><p><strong>使用场景</strong>：<strong>计算属性适用于基于现有数据生成新数据的场景</strong>，例如将多个数据拼接在一起形成一个新的数据；而<strong>监视属性适用于需要在数据变化时执行异步或开销较大的操作的场景</strong>，例如数据变化时发起网络请求或执行复杂计算。</p>
+</li>
+</ol>
+<h3 id="7-绑定样式"><a href="#7-绑定样式" class="headerlink" title="7. 绑定样式"></a>7. 绑定样式</h3><p>可以使用以下几种方式来绑定样式：</p>
+<ol>
+<li>对象语法</li>
+</ol>
+<p>可以使用对象语法将一个对象传递给 <code>v-bind:style</code>，以动态地绑定样式。对象语法的 key 是 CSS 属性，value 是对应的样式值。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div v-bind:style=&quot;&#123; color: textColor, fontSize: textSize + &#x27;px&#x27; &#125;&quot;&gt;Hello, Vue!&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      textColor: &#x27;red&#x27;,</span><br><span class="line">      textSize: 16</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>数组语法：也可以使用数组语法将多个样式对象应用到同一个元素上：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div v-bind:style=&quot;[baseStyles, additionalStyles]&quot;&gt;Hello, Vue!&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      baseStyles: &#123;</span><br><span class="line">        color: &#x27;red&#x27;,</span><br><span class="line">        fontSize: &#x27;16px&#x27;</span><br><span class="line">      &#125;,</span><br><span class="line">      additionalStyles: &#123;</span><br><span class="line">        fontWeight: &#x27;bold&#x27;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>对象绑定：可以直接绑定一个对象，这个对象通常是组件实例中的一个 data 对象，这样的话，这个对象的属性就会被动态地绑定到元素的 style 上。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :style=&quot;styles&quot;&gt;Hello, Vue!&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      styles: &#123;</span><br><span class="line">        color: &#x27;red&#x27;,</span><br><span class="line">        fontSize: &#x27;16px&#x27;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>使用计算属性：可以使用计算属性来返回动态样式对象：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :style=&quot;computedStyles&quot;&gt;Hello, Vue!&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      textColor: &#x27;red&#x27;,</span><br><span class="line">      textSize: 16</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  computed: &#123;</span><br><span class="line">    computedStyles() &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        color: this.textColor,</span><br><span class="line">        fontSize: this.textSize + &#x27;px&#x27;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-条件渲染"><a href="#9-条件渲染" class="headerlink" title="9. 条件渲染"></a>9. 条件渲染</h3><ol>
+<li>v-if：<ul>
+<li><code>v-if=&quot;表达式&quot;</code></li>
+<li><code>v-else-if=&quot;表达式&quot;</code></li>
+<li><code>v-else</code></li>
+<li>适用于：切换频率较低的场景</li>
+<li>特点：不展示的DOM元素直接被移除</li>
+<li>注意：<code>v-if</code>可以和<code>v-else-if</code>、<code>v-else</code>一起使用，但要求结构不能被打断</li>
+</ul>
+</li>
+<li>v-show：<ul>
+<li>写法：<code>v-show=&quot;表达式&quot;</code></li>
+<li>适用于：切换频率较高的场景</li>
+<li>特点：不展示的DOM元素未被移除，仅仅是使用样式隐藏掉</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>使用<code>v-if</code>的时，元素可能无法获取到，而使用<code>v-show</code>一定可以获取到</p>
+</blockquote>
+<h3 id="10-列表渲染"><a href="#10-列表渲染" class="headerlink" title="10. 列表渲染"></a>10. 列表渲染</h3><p><code>v-for</code>指令：</p>
+<ol>
+<li>用于展示列表数据</li>
+<li>语法：<code>&lt;li v-for=&quot;(item, index) in xxx&quot; :key=&quot;yyy&quot;&gt;</code>，其中key可以是index，也可以是遍历对象的唯一标识</li>
+<li>可遍历：数组、对象、字符串（用的少）、指定次数（用的少）</li>
+</ol>
+<h4 id="key的作用与原理"><a href="#key的作用与原理" class="headerlink" title="key的作用与原理"></a>key的作用与原理</h4><p><strong>面试题</strong>：react、vue中的key有什么作用？（key的内部原理）</p>
+<ol>
+<li>虚拟DOM中key的作用：key是虚拟DOM中对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】，随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下：</li>
+<li>对比规则：<ol>
+<li>旧虚拟DOM中找到了与新虚拟DOM相同的key：<ol>
+<li>若虚拟DOM中内容没变, 直接使用之前的真实DOM</li>
+<li>若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM</li>
+</ol>
+</li>
+<li>旧虚拟DOM中未找到与新虚拟DOM相同的key：创建新的真实DOM，随后渲染到到页面</li>
+</ol>
+</li>
+<li>用index作为key可能会引发的问题：<ol>
+<li>若对数据进行逆序添加、逆序删除等破坏顺序操作：会产生没有必要的真实DOM更新 &#x3D;&#x3D;&gt; 界面效果没问题, 但效率低</li>
+<li>若结构中还包含输入类的DOM：会产生错误DOM更新 &#x3D;&#x3D;&gt; 界面有问题</li>
+</ol>
+</li>
+<li>开发中如何选择key?<ol>
+<li>最好使用每条数据的唯一标识作为key，比如id、手机号、身份证号、学号等唯一值</li>
+<li>如果不存在对数据的逆序添加、逆序删除等破坏顺序的操作，仅用于渲染列表，使用index作为key是没有问题的</li>
+</ol>
+</li>
+</ol>
+<h3 id="11-内置指令总结"><a href="#11-内置指令总结" class="headerlink" title="11. 内置指令总结"></a>11. 内置指令总结</h3><ul>
+<li><p>v-text指令</p>
+<ul>
+<li>作用：向其所在的节点中渲染文本内容</li>
+<li>与插值语法的区别：<code>v-text</code>会替换掉节点中的内容，<code>&#123;&#123;xx&#125;&#125;</code>则不会</li>
+</ul>
+</li>
+<li><p><code>v-bind</code>：单向绑定解析表达式，可简写为<code>:</code></p>
+</li>
+<li><p><code>v-model</code>：双向数据绑定</p>
+</li>
+<li><p><code>v-for</code>：遍历数组 &#x2F; 对象 &#x2F; 字符串</p>
+</li>
+<li><p><code>v-on</code>：绑定事件监听，可简写为<code>@</code></p>
+</li>
+<li><p><code>v-if</code>：条件渲染（动态控制节点是否存存在）</p>
+</li>
+<li><p><code>v-else</code>：条件渲染（动态控制节点是否存存在）</p>
+</li>
+<li><p><code>v-show</code>：条件渲染 (动态控制节点是否展示)</p>
+</li>
+<li><p><code>v-html</code>指令：</p>
+<ol>
+<li>作用：向指定节点中渲染包含html结构的内容</li>
+<li>与插值语法的区别：<ol>
+<li><code>v-html</code>会替换掉节点中所有的内容，<code>&#123;&#123;xx&#125;&#125;</code>则不会</li>
+<li><code>v-html</code>可以识别html结构</li>
+</ol>
+</li>
+<li>严重注意：<code>v-html</code>有安全性问题！！！<ol>
+<li>在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击</li>
+<li>一定要在可信的内容上使用<code>v-html</code>，永远不要用在用户提交的内容上！！！</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p><code>v-cloak</code>指令（没有值）：</p>
+<ol>
+<li>本质是一个特殊属性，Vue实例创建完毕并接管容器后，会删掉<code>v-cloak</code>属性</li>
+<li>使用css配合<code>v-cloak</code>可以解决网速慢时页面展示出<code>&#123;&#123;xxx&#125;&#125;</code>的问题</li>
+</ol>
+</li>
+<li><p><code>v-once</code>指令：</p>
+<ol>
+<li><code>v-once</code>所在节点在初次动态渲染后，就视为静态内容了</li>
+<li>以后数据的改变不会引起<code>v-once</code>所在结构的更新，可以用于优化性能</li>
+</ol>
+</li>
+<li><p><code>v-pre</code>指令：</p>
+<ol>
+<li>跳过其所在节点的编译过程。</li>
+<li>可利用它跳过：没有使用指令语法、没有使用插值语法的节点，会加快编译</li>
+</ol>
+</li>
+</ul>
+<h2 id="二、Vue周边库"><a href="#二、Vue周边库" class="headerlink" title="二、Vue周边库"></a>二、Vue周边库</h2><h3 id="1-安装前端图标库Font-Awesome"><a href="#1-安装前端图标库Font-Awesome" class="headerlink" title="1. 安装前端图标库Font Awesome"></a>1. 安装前端图标库Font Awesome</h3><blockquote>
+<p>文档地址：<a href="http://fontawesome.dashgame.com/">http://fontawesome.dashgame.com/</a></p>
+</blockquote>
+<p>安装命令：<code>npm install font-awesome</code></p>
+<p>使用：<code>import &#39;font-awesome/css/font-awesome.min.css&#39;</code></p>
+<h3 id="2-安装element-ui"><a href="#2-安装element-ui" class="headerlink" title="2. 安装element-ui"></a>2. 安装element-ui</h3><blockquote>
+<p>文档地址：<a href="https://element.eleme.cn/#/zh-CN/">https://element.eleme.cn/#/zh-CN/</a></p>
+</blockquote>
+<p><code>npm install elemnet-ui</code></p>
+<p>引入element-ui：</p>
+<p><img src="/assets/image-20240220111534423.png" alt="image-20240220111534423"></p>
+<h2 id="三、Axios网络请求"><a href="#三、Axios网络请求" class="headerlink" title="三、Axios网络请求"></a>三、Axios网络请求</h2><blockquote>
+<p>在实际项目开发中，前端页面所需要的数据往往需要从服务器端获取，这必然涉及与服务器的通信。Axios 是一个基于 promise 网络请求库，作用于node.js 和浏览器中。Axios 在浏览器端使用XMLHttpRequests发送网络请求，并能自动完成JSON 数据的转换 。地址：<a href="https://www.axios-http.cn/">https://www.axios-http.cn/</a></p>
+</blockquote>
+<h3 id="1-安装axios"><a href="#1-安装axios" class="headerlink" title="1. 安装axios"></a>1. 安装axios</h3><p><code>npm install axios</code></p>
+<h3 id="2-调用方法"><a href="#2-调用方法" class="headerlink" title="2. 调用方法"></a>2. 调用方法</h3><h2 id="四、前端路由VueRouter"><a href="#四、前端路由VueRouter" class="headerlink" title="四、前端路由VueRouter"></a>四、前端路由VueRouter</h2><blockquote>
+<p>Vue路由vue-router是官方的路由插件，能够轻松的管理 SPA 项目中组件的切换。Vue的单页面应用是基于路由和组件的，路由用于设定访问路径，并将路径和组件映射起来</p>
+<p>vue-router 目前有 3.x 的版本和 4.x 的版本，vue-router 3.x 只能结合 vue2 进行使用，vue-router 4.x 只能结合 vue3 进行使用</p>
+</blockquote>
+<h3 id="1-安装vue-router"><a href="#1-安装vue-router" class="headerlink" title="1. 安装vue-router"></a>1. 安装vue-router</h3><p><code>npm install vue-router@4</code></p>
+<h2 id="五、状态管理Vuex"><a href="#五、状态管理Vuex" class="headerlink" title="五、状态管理Vuex"></a>五、状态管理Vuex</h2><blockquote>
+<p>对于组件化开发来说，大型应用的状态往往跨越多个组件。在多层嵌套的父子组件之间传递状态已经十分麻烦，而Vue更是没有为兄弟组件提供直接共享数据的办法。</p>
+<p>基于这个问题，许多框架提供了解决方案——使用全局的状态管理器，将所有分散的共享数据交由状态管理器保管，Vue也不例外。</p>
+<p>Vuex 是一个专为 Vue.js 应用程序开发的状态管理库，<strong>采用集中式存储管理应用的所有组件的状态</strong>。</p>
+<p><strong>简单的说，Vuex用于管理分散在Vue各个组件中的数据（用于复杂的项目）</strong></p>
+</blockquote>
+<p><strong>官方文档</strong>：<a href="https://vuex.vuejs.org/zh/guide/">https://vuex.vuejs.org/zh/guide/</a></p>
+<p><strong>安装Vuex</strong>：<code>npm install vuex</code>（默认安装最新版本vuex4，适配vue3）如果要安装适配vue2的版本vuex3，则需要使用命令<code>npm install vuex@3</code></p>
+<h3 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>Vuex中5个重要的概念：State、Getter、Mutation、Action、Module</p>
+<p><img src="/assets/image-20240222193704927.png" alt="image-20240222193704927"></p>
+<p>上面的五个概念其实对应的是<code>实例store</code>中的五个部分，每一个Vuex应用的核心都是一个实例store，实例store与普通的全局对象不同的是，基于Vue 数据与视图绑定的特点，当store中的状态发生变化时，与之绑定的视图也会被 重新渲染。store中的状态不允许被直接修改，改变store中的状态的唯一途径就是显式地提交（commit）mutation，这可以让我们方便地跟踪每一个状态的变化。</p>
+<h3 id="2-使用方法"><a href="#2-使用方法" class="headerlink" title="2. 使用方法"></a>2. 使用方法</h3><p>单独在store目录下创建一个Index.js文件，用来供各个组件进行调用，在该js文件中创建store实例。</p>
+<h4 id="State-Mutation"><a href="#State-Mutation" class="headerlink" title="State &amp; Mutation"></a>State &amp; Mutation</h4><p>**<code>State</code>**：存储组件之间共享的数据，为一个Object对象</p>
+<p>**<code>Mutation</code>**：存储操作State中数据的函数，为一个Object对象，所有函数的形参都是state，Mutation中的方法只能做一些同步操作，而Action中的方法可以进行异步操作</p>
+<p><img src="/assets/image-20240222194431158.png" alt="image-20240222194431158"></p>
+<p>如何调用State中的数据？如何调用Mutation中的方法？</p>
+<p><img src="/assets/image-20240222194514341.png" alt="image-20240222194514341"></p>
+<p>如何提交Mutation中的方法来保存数据的修改操作：</p>
+<p><img src="/assets/image-20240222194911161.png" alt="image-20240222194911161"></p>
+<h4 id="Getter"><a href="#Getter" class="headerlink" title="Getter"></a>Getter</h4><p>**<code>Getter</code>**：维护由State派生的一些状态，这些状态随着State状态的变化而变化</p>
+<p><img src="/assets/image-20240222194741665.png" alt="image-20240222194741665"></p>
+<p>getters的使用：</p>
+<p><img src="/assets/image-20240222194757430.png" alt="image-20240222194757430"></p>
+<h4 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h4><p>**<code>Action</code>**：Action类似Mutation，不同在于：Action不能直接修改状态，只能通过提交mutation来修改，Action可以包含异步操作</p>
+<p><img src="/assets/image-20240222195244413.png" alt="image-20240222195244413"></p>
+<p>使用Action中的方法：</p>
+<p><img src="/assets/image-20240222195300684.png" alt="image-20240222195300684"></p>
+<h4 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h4><p>**<code>Module</code>**：由于使用单一状态树，当项目的状态非常多时，store对象就会变得十分臃肿。 因此，Vuex允许我们将store分割成模块（Module） 每个模块拥有独立的State、Getter、Mutation和Action，模块之中还可以嵌套模块，每一级都有着相同的结构。</p>
+<p><img src="/assets/image-20240222195350657.png" alt="image-20240222195350657"></p>
+<h2 id="六、前端数据模拟MockJS"><a href="#六、前端数据模拟MockJS" class="headerlink" title="六、前端数据模拟MockJS"></a>六、前端数据模拟MockJS</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><img src="/assets/image-20240222203634512.png" alt="image-20240222203634512"></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>未学</p>
+<h2 id="七、企业级后台集成方案vue-element-admin"><a href="#七、企业级后台集成方案vue-element-admin" class="headerlink" title="七、企业级后台集成方案vue-element-admin"></a>七、企业级后台集成方案vue-element-admin</h2><p>官方文档：<a href="https://panjiachen.github.io/vue-element-admin-site/zh/guide/">https://panjiachen.github.io/vue-element-admin-site/zh/guide/</a></p>
+<h2 id="八、Vue组件"><a href="#八、Vue组件" class="headerlink" title="八、Vue组件"></a>八、Vue组件</h2><h3 id="1-export-Default组成"><a href="#1-export-Default组成" class="headerlink" title="1. export Default组成"></a>1. export Default组成</h3><p>在 Vue 组件中，<code>script</code> 部分通常包含了组件的逻辑代码，其中的 <code>export default</code> 用于导出组件的选项对象，其组成通常包括以下内容：</p>
+<ol>
+<li><p><strong>name</strong>: 一个字符串，表示组件的名称。在开发中，它通常被用于调试和错误信息的提示。</p>
+</li>
+<li><p><strong>data</strong>: 一个函数，返回该组件的初始数据对象。这个函数返回的对象中的属性将会被挂载到组件实例上。</p>
+</li>
+<li><p><strong>props</strong>: 一个数组或对象，用于指定该组件可以接受的属性（props）。这些属性可以在组件被父组件使用时进行传递。</p>
+</li>
+<li><p><strong>computed</strong>: 一个对象，包含计算属性。计算属性的值会根据它们依赖的属性发生变化而变化。</p>
+</li>
+<li><p><strong>methods</strong>: 一个对象，包含组件中的方法。这些方法可以被组件内部的其他方法或模板中的事件处理器调用。</p>
+</li>
+<li><p><strong>watch</strong>: 一个对象，包含对属性或表达式的观察器。当被观察的属性发生变化时，相应的函数将会被调用。</p>
+</li>
+<li><p><strong>生命周期钩子函数</strong>（例如 <code>created</code>、<code>mounted</code> 等）：这些函数会在组件的生命周期中的特定阶段被调用，允许你在组件的不同生命周期阶段执行代码。</p>
+</li>
+<li><p><strong>components</strong>: 一个对象，用于注册该组件使用的子组件。</p>
+</li>
+<li><p><strong>directives</strong>: 一个对象，用于注册该组件使用的自定义指令。</p>
+</li>
+<li><p><strong>mixins</strong>: 一个数组，包含混入对象。混入对象可以包含组件选项，这些选项将会与组件自身的选项进行合并。</p>
+</li>
+<li><p><strong>provide &#x2F; inject</strong>: 一个对象或数组，用于实现父组件向子孙组件传递数据的高级选项。</p>
+</li>
+<li><p><strong>extends</strong>: 一个组件选项对象，用于扩展另一个组件。被扩展的组件将会在当前组件的基础上进行增强。</p>
+</li>
+</ol>
+<p>这些选项组成了 Vue 组件的核心逻辑和配置，通过 <code>export default</code> 导出后，这些选项将会被 Vue 实例化为组件的实例选项。</p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>HTML</tag>
+        <tag>CSS</tag>
+        <tag>Vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>编程命令</title>
+    <url>/2024/05/06/%E7%BC%96%E7%A8%8B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>总结编程中常用到的命令</p>
+<span id="more"></span>
+
+<h2 id="pip常用命令"><a href="#pip常用命令" class="headerlink" title="pip常用命令"></a>pip常用命令</h2><h3 id="1-安装pip"><a href="#1-安装pip" class="headerlink" title="1. 安装pip"></a>1. 安装pip</h3><ol>
+<li>安装pip</li>
+</ol>
+<blockquote>
+<p>方式一：官网下载用Linux命令解压安装</p>
+</blockquote>
+<ul>
+<li>进入<a href="https://pypi.python.org/pypi/pip%EF%BC%8C%E4%B8%8B%E8%BD%BD">https://pypi.python.org/pypi/pip，下载</a> .tar.gz压缩包</li>
+<li>Linux安装pip</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf pip-1.5.4.tar.gz      解压</span><br><span class="line">cd pip-1.5.4                    进入解压文件</span><br><span class="line">python setup.py install         安装</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>方式二：下载并安装Python，会自动安装pip</p>
+</blockquote>
+<ol start="2">
+<li>升级pip的命令</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install --upgrade pip</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用pip"><a href="#2-使用pip" class="headerlink" title="2. 使用pip"></a>2. 使用pip</h3><ol>
+<li>使用pip安装包的命令</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install 包名</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>pip查看是否已安装</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip show --files 安装包名</span><br></pre></td></tr></table></figure>
+
+<p>显示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Name:SomePackage    <span class="comment"># 包名</span></span><br><span class="line">Version:<span class="number">1.0</span>         <span class="comment"># 版本号</span></span><br><span class="line">Location:/my/env/lib/pythonx.x/site-packages   <span class="comment"># 安装位置</span></span><br><span class="line">Files:              <span class="comment"># 包含文件等等</span></span><br><span class="line"> ../somepackage/__init__.py</span><br><span class="line"> [...]</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>pip检查哪些包需要更新</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip <span class="built_in">list</span> --outdated</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>pip升级包</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install --upgrade 包名</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>pip卸载包</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip uninstall 包名</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-pip参数解释"><a href="#3-pip参数解释" class="headerlink" title="3. pip参数解释"></a>3. pip参数解释</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pip --help</span></span><br><span class="line"> </span><br><span class="line">Usage:  </span><br><span class="line"> pip&lt;command&gt;[options]</span><br><span class="line"> </span><br><span class="line">Commands:</span><br><span class="line"> install                    安装包.</span><br><span class="line"> uninstall                  卸载包.</span><br><span class="line"> freeze                     按着一定格式输出已安装包列表</span><br><span class="line"> <span class="built_in">list</span>                       列出已安装包.</span><br><span class="line"> show                       显示包详细信息.</span><br><span class="line"> search                     搜索包，类似yum里的search.</span><br><span class="line"> wheel                      Buildwheelsfromyourrequirements.</span><br><span class="line"> <span class="built_in">zip</span>                        不推荐.Zipindividualpackages.</span><br><span class="line"> unzip                      不推荐.Unzipindividualpackages.</span><br><span class="line"> bundle                     不推荐.Createpybundles.</span><br><span class="line"> <span class="built_in">help</span>                       当前帮助.</span><br><span class="line"> </span><br><span class="line">GeneralOptions:</span><br><span class="line"> -h,--<span class="built_in">help</span>                 显示帮助.</span><br><span class="line"> -v,--verbose              更多的输出，最多可以使用<span class="number">3</span>次</span><br><span class="line"> -V,--version              现实版本信息然后退出.</span><br><span class="line"> -q,--quiet                最少的输出.</span><br><span class="line"> --log-file&lt;path&gt;          覆盖的方式记录verbose错误日志，默认文件：/root/.pip/pip.log</span><br><span class="line"> --log&lt;path&gt;               不覆盖记录verbose输出的日志.</span><br><span class="line"> --proxy&lt;proxy&gt;            Specifyaproxyintheform[user:passwd@]proxy.server:port.</span><br><span class="line"> --timeout&lt;sec&gt;            连接超时时间(默认<span class="number">15</span>秒).</span><br><span class="line"> --exists-action&lt;action&gt;   Defaultactionwhenapathalreadyexists:(s)witch,(i)gnore,(w)ipe,(b)ackup.</span><br><span class="line"> --cert&lt;path&gt;              证书.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Anaconda常用命令"><a href="#Anaconda常用命令" class="headerlink" title="Anaconda常用命令"></a>Anaconda常用命令</h2><h3 id="1-生成配置文件并查看相关配置"><a href="#1-生成配置文件并查看相关配置" class="headerlink" title="1. 生成配置文件并查看相关配置"></a>1. 生成配置文件并查看相关配置</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda config  <span class="comment">#生成配置文件.condarc</span></span><br><span class="line">键盘键入Windows+R，输入%HOMEPATH%，可找到配置文件所在目录</span><br><span class="line">conda config --show  <span class="comment"># 查看所有的配置选项</span></span><br><span class="line">conda config --show channels    <span class="comment">#显示配置文件中的下载源</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-添加镜像源"><a href="#2-添加镜像源" class="headerlink" title="2. 添加镜像源"></a>2. 添加镜像源</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加清华镜像</span></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/</span><br><span class="line"><span class="comment"># 添加pytorch镜像</span></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br><span class="line"><span class="comment"># for legacy win-64</span></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/peterjc123/</span><br><span class="line"><span class="comment"># 从 channel 中安装包时显示 channel 的 url, 方便查看包的安装来源</span></span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-删除镜像源"><a href="#3-删除镜像源" class="headerlink" title="3. 删除镜像源"></a>3. 删除镜像源</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda config --remove channels 源url</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-虚拟环境相关操作"><a href="#4-虚拟环境相关操作" class="headerlink" title="4. 虚拟环境相关操作"></a>4. 虚拟环境相关操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看虚拟环境列表</span></span><br><span class="line">conda env <span class="built_in">list</span></span><br><span class="line"><span class="comment"># 创建新的虚拟环境</span></span><br><span class="line">conda create --name envname python=<span class="number">3.10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意1：</span></span><br><span class="line">修改创建虚拟环境的默认位置（默认是在C盘的某个目录下，可通过conda config --show envs_dirs查看，第一个为默认位置）</span><br><span class="line">首先：</span><br><span class="line">	在配置文件.condarc最后加入：</span><br><span class="line">    envs_dirs:</span><br><span class="line">        - 希望改为的绝对路径（我的是Anaconda的安装目录下的envs目录：D:\FileApp\DevelopApp\Anaconda\envs）</span><br><span class="line">    或者直接在命令行敲命令：conda config --add envs_dirs 希望改为的绝对路径</span><br><span class="line">然后：</span><br><span class="line">	因为在安装Anaconda时有可能是为此电脑多有用户可用，因此Anaconda的安装目录的权限默认设置为只读不可修改，而创建虚拟环境	则是在该Anaconda安装目录下的envs目录下创建，若权限为只读的话则无法创建成功，而是创建到默认的C盘目录下，解决办法是修改Anaconda安装目录下的envs文件夹的权限，取消只读并是user获取所有修改权限，操作：点击envs文件夹-&gt;右击属性-&gt;常规中取消勾选“只读”-&gt;安全-&gt;User中将权限全都勾上。</span><br><span class="line"><span class="comment"># 注意2：</span></span><br><span class="line">若在创建虚拟环境时指定Python版本，务必要将新创建的虚拟环境中Python配置文件中的Scripts目录添加到环境变量PATH中</span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活并进入新环境</span></span><br><span class="line">conda activate envname</span><br><span class="line"><span class="comment"># 关闭虚拟环境</span></span><br><span class="line">conda deactivate</span><br><span class="line"><span class="comment"># 删除虚拟环境</span></span><br><span class="line">conda remove -n envname --<span class="built_in">all</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-安装pytorch"><a href="#5-安装pytorch" class="headerlink" title="5. 安装pytorch"></a>5. 安装pytorch</h3><ol>
+<li>安装cpu版本的PyTorch</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">在配置好pytorch的清华源之后可以在conda prompt中切换为指定的虚拟环境（该环境已配置好Python包），在该虚拟环境下执行以下命令：</span><br><span class="line">conda install pytorch torchvision torchaudio cpuonly</span><br><span class="line"></span><br><span class="line">安装pytorch2<span class="number">.0</span>（CPU版本）的命令：</span><br><span class="line">pip3 install numpy --pre torch torchvision torchaudio --force-reinstall --index-url https://download.pytorch.org/whl/nightly/cpu</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装GPU环境的PyTorch2.0以上版本：</li>
+</ol>
+<blockquote>
+<p>前提是电脑已经安装了对应cuda驱动，下面命令会自动根据你的cuda驱动安装对应的Python依赖包</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先设置清华源（不是conda config，而是pip config）</span></span><br><span class="line">pip config <span class="built_in">set</span> <span class="keyword">global</span>.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"><span class="comment"># 再安装指定版本的PyTorch</span></span><br><span class="line">pip3 install torch==<span class="number">2.0</span><span class="number">.1</span> torchvision torchaudio</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-在jupyter中利用虚拟环境创建python文件"><a href="#6-在jupyter中利用虚拟环境创建python文件" class="headerlink" title="6. 在jupyter中利用虚拟环境创建python文件"></a>6. 在jupyter中利用虚拟环境创建python文件</h3><p>创建好虚拟环境，如何在jupyter中利用该虚拟环境创建python文件：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 首先在命令行激活该虚拟环境，并下载ipykernel包</span></span><br><span class="line">pip install ipykernel</span><br><span class="line"><span class="comment"># 接着将虚拟环境写入Jupyter的kernel中</span></span><br><span class="line">python -m ipykernel install --name &#123;你的虚拟环境名字，如qq&#125; --display-name &#123;你想显示的名称&#125;</span><br><span class="line">刷新即可大功告成，可以在Jupyter中利用该环境美美编程了</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Git操作命令"><a href="#Git操作命令" class="headerlink" title="Git操作命令"></a>Git操作命令</h2><h3 id="1-安装Git后的初始操作"><a href="#1-安装Git后的初始操作" class="headerlink" title="1. 安装Git后的初始操作"></a>1. 安装Git后的初始操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">给电脑中的Git绑定名字和邮箱：</span><br><span class="line">$ git config --<span class="keyword">global</span> user.name <span class="string">&quot;Your Name&quot;</span></span><br><span class="line">$ git config --<span class="keyword">global</span> user.email <span class="string">&quot;email@example.com&quot;</span></span><br><span class="line"></span><br><span class="line">可通过以下命令查看是否安装成功：</span><br><span class="line">git config user.name</span><br><span class="line">git config user.email</span><br><span class="line"></span><br><span class="line">查看Git全局配置信息的命令：</span><br><span class="line">git config --<span class="keyword">global</span> -l</span><br></pre></td></tr></table></figure>
+
+<p>安装完Git之后，你需要进行一些配置以连接到远程仓库。主要的配置包括：</p>
+<ol>
+<li><p><strong>设置用户名和邮箱：</strong> 在Git中，每次提交代码都会记录作者信息，因此需要配置用户名和邮箱。可以通过以下命令设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;Your Name&quot;</span><br><span class="line">git config --global user.email &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>生成SSH密钥（可选）：</strong> 如果你使用SSH协议连接到远程仓库（比如GitHub、GitLab等），建议生成SSH密钥。这样可以免去每次输入密码的麻烦。生成SSH密钥的命令是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会在默认的SSH密钥目录下生成一对公钥和私钥。生成过程中可以选择设置密码保护私钥，也可以留空直接回车。</p>
+</li>
+<li><p><strong>将SSH公钥添加到远程仓库：</strong> 如果你生成了SSH密钥，需要将生成的公钥添加到你的远程仓库账户中。这样远程仓库才能识别你的身份并允许你访问。具体步骤请参考你使用的远程仓库服务商的文档。</p>
+</li>
+<li><p><strong>配置远程仓库地址：</strong> 在本地仓库中，你需要配置远程仓库的地址。可以使用以下命令添加远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin &lt;remote_repository_URL&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>&lt;remote_repository_URL&gt;</code> 是你远程仓库的URL地址。</p>
+</li>
+<li><p><strong>验证配置是否成功：</strong> 可以使用以下命令验证是否成功连接到远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>完成以上配置后，你就可以通过Git和远程仓库进行交互了，比如拉取代码、推送代码等操作。</p>
+<h3 id="2-Git相关操作"><a href="#2-Git相关操作" class="headerlink" title="2. Git相关操作"></a>2. Git相关操作</h3><p>git操作命令行参考：<a href="https://backlog.com/git-tutorial/cn/reference/">https://backlog.com/git-tutorial/cn/reference/</a></p>
+<h4 id="1）最基本的三步操作"><a href="#1）最基本的三步操作" class="headerlink" title="1）最基本的三步操作"></a>1）最基本的三步操作</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 仓库初始化</span></span><br><span class="line">将目前目录初始化为Git能够管理的仓库，在当前目录下右键选择Git Bash Here，在跳出来的命令框输入：</span><br><span class="line">git init</span><br><span class="line">即可将当前目录初始化为仓库</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 往仓库添加文件必要的两个步骤，按顺序输入命令</span></span><br><span class="line"><span class="number">1</span>）首先将文件添加到仓库的暂存区，该命令可以执行多次，切每次命令可添加多个文件</span><br><span class="line">命令：</span><br><span class="line">git add 文件名<span class="number">1</span> 文件名<span class="number">2</span></span><br><span class="line"><span class="number">2</span>）把暂存区的所有内容提交到当前的分支，并告诉仓库你做了什么（通过附加信息说明）</span><br><span class="line">命令：</span><br><span class="line">git commit -m <span class="string">&quot;解释你提交文件的信息&quot;</span></span><br><span class="line">参数-m是-- message的缩写</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 向远程仓库提交项目</span></span><br><span class="line">如果是初始创建的本地仓库，需要先建立本地仓库和远程仓库的连接（远程仓库已经创建的前提下），连接远程仓库的命令：</span><br><span class="line">git remote add &lt;repositoryname一般写origin&gt; &lt;创建的远程仓库链接&gt;</span><br><span class="line">建立连接之后将本地仓库push到远程仓库的命令：</span><br><span class="line">git push &lt;repositoryname&gt; &lt;branchname&gt;</span><br><span class="line">如果远端仓库是初次建立的话，远端仓库是没有分支的，因此初次push的时候需要加入--<span class="built_in">set</span>-upstream参数来为远程仓库建立同名分支，即为以下命令：</span><br><span class="line">git push --<span class="built_in">set</span>-upstream &lt;repositoryname&gt; &lt;branchname&gt; 	</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）查看status、diff、log、checkout等"><a href="#2）查看status、diff、log、checkout等" class="headerlink" title="2）查看status、diff、log、checkout等"></a>2）查看status、diff、log、checkout等</h4><ol>
+<li>status</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">可通过下面命令查看仓库的当前状态，方便进行决策：</span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>diff</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">假设通过上面的状态命令得知readme.md文件修改了，则可以通过下面命令查看具体修改情况：</span><br><span class="line">git diff readme.md</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>log</li>
+</ol>
+<blockquote>
+<p>在Git中，用HEAD指向当前版本(查看日志信息可发现)，上一个版本就是<code>HEAD^</code>，上上一个版本就是<code>HEAD^^</code>，当然往上100个版本写100个<code>^</code>比较容易数不过来，所以写成<code>HEAD~100</code>。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">查看以前的提交日志：</span><br><span class="line">git log</span><br><span class="line">显示标签资料的历史记录（比较详细）：</span><br><span class="line">git log --decorate</span><br><span class="line">显示精简的日志信息（比较简略，只有commit id和对应注解）：</span><br><span class="line">git log --pretty=oneline</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>checkout</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">加入你修改了readme.md文件的内容，保存退出后想撤销刚才的修改，可以通过下面命令实现：</span><br><span class="line">git checkout -- &lt;filename&gt;</span><br><span class="line">注意：一定要加上--，并且--和需要撤销修改的文件名之间有空格，别忘了，如果不加--，那就是切换分支的操作了，在第5)条会说明；</span><br><span class="line">checkout操作就是一键还原操作，即使你刚才把readme.md文件删除，然后通过git checkout readme.md命令，也可以把误删的文件恢复</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-与远端仓库的交互"><a href="#3-与远端仓库的交互" class="headerlink" title="3) 与远端仓库的交互"></a>3) 与远端仓库的交互</h4><ol>
+<li><p>pull：执行pull，远程仓库的内容就会合并到本地。但是，有时只是想确认本地数据库的内容而不想合并。这种情况下，就需要使用fetch。</p>
+</li>
+<li><p>fetch：执行fetch可以取得远程数据库的最新历史记录。取得的提交会导入到没有名字的分支，这个分支可以从名为FETCH_HEAD的退出。例如，在本地数据库和远程数据库的origin，如果在从B进行提交的状态下执行fetch，就会形成如下图所示的历史记录。</p>
+</li>
+<li><p>push：执行push，会将本地仓库的修改推送到远程仓库，并与远程仓库进行合并</p>
+</li>
+<li><p>相关命令</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">初始创建的本地仓库需要先建立本地仓库和远程仓库的连接（远程仓库已经创建的前提下），连接远程仓库的命令：</span><br><span class="line">git remote add &lt;repositoryname一般写origin&gt; &lt;创建的远程仓库链接&gt;</span><br><span class="line"></span><br><span class="line">查看本地仓库已绑定的远端仓库列表用下面命令（参数-v可选，用来显示远端仓库的详细信息）：</span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">删除本地仓库已绑定的某个远端仓库：</span><br><span class="line">git remote rm &lt;repositoryname&gt;</span><br><span class="line"></span><br><span class="line">将本地仓库push到远程仓库的命令(已建立连接的情况下)：</span><br><span class="line">git push &lt;repositoryname&gt; &lt;branchname&gt;</span><br><span class="line"></span><br><span class="line">拉取远端仓库与本地仓库合并的命令(已建立连接的情况下)：</span><br><span class="line">git pull </span><br></pre></td></tr></table></figure>
+
+<h4 id="4）-标签操作"><a href="#4）-标签操作" class="headerlink" title="4） 标签操作"></a>4） 标签操作</h4><ol>
+<li>什么是标签？</li>
+</ol>
+<p>标签是为了更方便地参考<strong>提交（commit）</strong>而给它标上易懂的名称，也即对每次的提交(commit)设置一种易懂的名称。tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。</p>
+<ol start="2">
+<li>标签相关命令</li>
+</ol>
+<p>创建标签：</p>
+<blockquote>
+<p>默认创建的标签是和最新commit绑定在一块</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">创建标签（轻标签）：</span><br><span class="line">git tag &lt;tagname&gt;</span><br><span class="line">创建注解标签：</span><br><span class="line">git tag -a &lt;tagname&gt; -m &quot;注解内容&quot;</span><br><span class="line">如果想要对以往的某次commit打上标签，则需要找到那次commit对应的commit id，用下面命令打标签：</span><br><span class="line">git tag &lt;tagname&gt; &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
+
+<p>删除标签</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">删除标签：</span><br><span class="line">git tag -d &lt;tagname&gt;</span><br></pre></td></tr></table></figure>
+
+<p>查看标签列表：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">查看标签列表的命令(注意：标签不是按时间顺序列出，而是按字母排序的)：</span><br><span class="line">git tag</span><br><span class="line">查看标签列表并同时显示注解信息（添加参数-n）：</span><br><span class="line">git tag -n</span><br><span class="line">根据标签名查看该标签的详细信息：</span><br><span class="line">git show &lt;tagname&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5）操作分支的命令"><a href="#5）操作分支的命令" class="headerlink" title="5）操作分支的命令"></a>5）操作分支的命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">创建分支：</span><br><span class="line">git branch &lt;branchname&gt;</span><br><span class="line">删除分支（在branch后面指定-d参数就是删除分支）：</span><br><span class="line">git branch -d &lt;branchname&gt;</span><br><span class="line">查看分支有哪些(带星号的表示当前所在branch)：</span><br><span class="line">git branch</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">切换分支（假设切换到分支issue1）：</span><br><span class="line">git checkout issue1</span><br><span class="line">创建并切换分支(通过添加参数-b来执行)：</span><br><span class="line">git checkout -b &lt;branch&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">合并分支的操作（一般是将其他分支合并到主分支master中），例如在分支issue1中进行了修改，现在需要将issue1分支合并到主分支master中，合并操作如下：</span><br><span class="line">首先要切换到master分支上：</span><br><span class="line">git checkout master</span><br><span class="line">然后再把issue1分支导入到master分支上:</span><br><span class="line">git merge issue1</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-版本回退reset"><a href="#6-版本回退reset" class="headerlink" title="6) 版本回退reset"></a>6) 版本回退reset</h4><p>假设当前版本（也就是HEAD指向的版本）为version1，上一个版本为version2（HEAD^），上上版本为version3（HEAD^^）,则:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">进行版本回退的命令：</span><br><span class="line">git reset --hard HEAD^</span><br><span class="line">这样你的版本就回退到version2了</span><br><span class="line"></span><br><span class="line">如果你还想再回到version1，那需要再找到version1那次提交对应的commit id（随便设为290ab4），则还是用reset命令进行回退：</span><br><span class="line">git reset --hard 290ab4</span><br><span class="line"></span><br><span class="line">如果你找不到version1对应commit的那次id怎么办，不慌，可以通过以下命令进行查看：</span><br><span class="line">git reflog</span><br><span class="line">这个命令会记录以往的每次命令并显示出来</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看Git配置范围"><a href="#查看Git配置范围" class="headerlink" title="查看Git配置范围"></a>查看Git配置范围</h3><p>要确定你当前是为哪个 Git 仓库进行配置，可以通过查看 Git 的配置文件来获取信息。Git 使用三个不同的级别来存储配置信息：全局（global）、仓库范围内（local）、系统范围内（system）。你可以根据配置的范围来确定当前配置是针对哪个 Git 仓库的。</p>
+<h4 id="使用命令查看当前配置的范围"><a href="#使用命令查看当前配置的范围" class="headerlink" title="使用命令查看当前配置的范围"></a>使用命令查看当前配置的范围</h4><p>你也可以使用 <code>git config --list --show-origin</code> 命令来查看当前配置的范围和来源。该命令会列出所有的 Git 配置项及其来源（是全局、本地还是系统级别），这样你就可以确定当前配置是属于哪个级别的。</p>
+<h4 id="使用命令查看当前所在的-Git-仓库路径"><a href="#使用命令查看当前所在的-Git-仓库路径" class="headerlink" title="使用命令查看当前所在的 Git 仓库路径"></a>使用命令查看当前所在的 Git 仓库路径</h4><p>你可以使用 <code>git rev-parse --show-toplevel</code> 命令来查看当前所在的 Git 仓库的根目录路径。通过这个路径，你可以知道你正在为哪个 Git 仓库进行配置。</p>
+<p>使用这些方法中的任何一个，你都可以确定当前为哪个 Git 仓库进行配置。</p>
+<h2 id="Nodejs安装操作"><a href="#Nodejs安装操作" class="headerlink" title="Nodejs安装操作"></a>Nodejs安装操作</h2><h3 id="1-安装注意事项"><a href="#1-安装注意事项" class="headerlink" title="1. 安装注意事项"></a>1. 安装注意事项</h3><ol>
+<li>将安装路径改到D盘的开发文件夹内</li>
+<li>除了修改安装路径，其他一路点击next，保持默认设置，直至安装完成</li>
+<li>安装完成后查看安装是否成功？</li>
+</ol>
+<ul>
+<li>打开cmd，输入<code>node -v</code>可查看Nodejs的版本</li>
+<li>包管理器npm随着Nodejs一起安装至电脑中，通过在cmd输入命令<code>npm -v</code>查看npm版本，如果均显示出版本号则代表安装成功</li>
+</ul>
+<h3 id="2-安装完Nodejs后需要进行的操作"><a href="#2-安装完Nodejs后需要进行的操作" class="headerlink" title="2. 安装完Nodejs后需要进行的操作"></a>2. 安装完Nodejs后需要进行的操作</h3><ol>
+<li><p>创建文件夹</p>
+<p>在Nodejs的安装目录下<code>D:\DevelopEnv\Nodejs</code>创建两个文件夹node_cache和node_global</p>
+</li>
+<li><p>修改环境变量</p>
+</li>
+</ol>
+<ul>
+<li><p>针对用户变量：将Path中刚才安装Nodejs时默认生成的路径<code>C:\Users\Hishallyi\AppData\Roaming\npm</code> 修改为刚才创建的【node_global】文件夹的路径<code>D:\DevelopEnv\Nodejs\node_global</code></p>
+</li>
+<li><p>针对系统变量：在系统变量中新建变量<code>NODE_HOME</code>，变量值为安装Nodejs的根目录<code>D:\DevelopEnv\Nodejs</code></p>
+<p><img src="/assets/image-20240220194915187.png" alt="image-20240220194915187"></p>
+<p>然后在系统变量的Path中添加以下三个路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">%NODE_HOME%</span><br><span class="line">%NODE_HOME%\node_global</span><br><span class="line">%NODE_HOME%\node_cache</span><br></pre></td></tr></table></figure>
+
+<p>以上即完成了环境变量的设置</p>
+</li>
+</ul>
+<ol start="3">
+<li>修改npm相关配置</li>
+</ol>
+<blockquote>
+<p>键盘WIN+R打开输入框，输入<code>cmd</code>打开命令提示符</p>
+</blockquote>
+<p>  <strong>修改npm安装包时cache和prefix的默认目录，改为刚创建的两个文件下</strong><br>  分别在cmd命令行中输入下面两条命令并回车确认，若没提示则修改成功（可通过<code>npm config ls</code>查看配置结果）</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm config set prefix &quot;D:\DevelopEnv\Nodejs\node_global&quot;</span><br><span class="line">npm config set cache &quot;D:\DevelopEnv\Nodejs\node_cache&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  查看是否设置成功可以用下面两个命令：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm config get prefix</span><br><span class="line">npm config get cache     # 如果对应目录是上面设置的目录那说明就是对的</span><br></pre></td></tr></table></figure>
+
+<p>  <strong>修改npm安装源，改为国内镜像源</strong></p>
+<p>  在cmd中输入下面命令：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm config set registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：以前的淘宝镜像网站已经不能用了，也就是说不能把源设置为<a href="https://registry.npm.taobao.org/%EF%BC%8C%E4%B8%8D%E7%84%B6%E5%AE%89%E8%A3%85%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E6%8A%A5%E9%94%99">https://registry.npm.taobao.org/，不然安装的时候会报错</a></p>
+</blockquote>
+<ol start="4">
+<li>在node_global目录下创建文件夹node_modules（如果没有的话），用来存放npm安装的包</li>
+</ol>
+<h3 id="3-Nodejs常用命令"><a href="#3-Nodejs常用命令" class="headerlink" title="3. Nodejs常用命令"></a>3. Nodejs常用命令</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">npm root -g   <span class="comment"># 查看利用npm安装包时的默认安装路径</span></span><br><span class="line">npm config ls <span class="comment"># 查看npm配置</span></span><br><span class="line">npm config ls -l <span class="comment"># 查看npm所有配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置淘宝镜像</span></span><br><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br><span class="line"><span class="comment"># 查看是否安装成功</span></span><br><span class="line">npm config get registry</span><br><span class="line"><span class="comment"># 安装中国版的包管理器cnpm（如果出现4048错误，可参考https://blog.csdn.net/wzxzRoad/article/details/122766142）</span></span><br><span class="line">npm install -g cnpm --registry=https://registry.npmmirror.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看cnpm是否安装成功</span></span><br><span class="line">cnpm -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看最根目录安装了哪些包</span></span><br><span class="line">npm <span class="built_in">list</span> --depth=<span class="number">0</span> -<span class="keyword">global</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前项目安装了哪些包</span></span><br><span class="line">npm <span class="built_in">list</span></span><br><span class="line"></span><br><span class="line">npm -v：<span class="comment"># 查看npm安装的版本。</span></span><br><span class="line">npm init：<span class="comment"># 会引导你建立一个package.json文件，包括名称、版本、作者等信息。</span></span><br><span class="line">npm <span class="built_in">list</span>：<span class="comment"># 查看当前目录下已安装的node包。</span></span><br><span class="line">npm ls：<span class="comment"># 查看当前目录下已安装的node包。</span></span><br><span class="line">npm install moduleNames：<span class="comment"># 安装Node模块到本地目录node_modules下。</span></span><br><span class="line">npm install &lt; name &gt; -g：<span class="comment"># 将包安装到全局环境中。</span></span><br><span class="line">npm install &lt; name &gt; --save：<span class="comment"># 安装的同时，将信息写入package.json中，项目路径中若是有package.json文件时，直接使用npm install方法就能够根据dependencies配置安装全部的依赖包，这样代码提交到git时，就不用提交node_modules这个文件夹了。</span></span><br><span class="line">npm install &lt; name&gt; --save-dev：<span class="comment"># 安装的同时，将信息写入package.json中项目路径中若是有package.json文件时，直接使用npm install方法就能够根据devDependencies配置安装全部的依赖包，这样代码提交到git时，就不用提交node_modules这个文件夹了。</span></span><br><span class="line">npm uninstall moudleName：<span class="comment"># 卸载node模块。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-npm安装包的方式："><a href="#4-npm安装包的方式：" class="headerlink" title="4. npm安装包的方式："></a>4. npm安装包的方式：</h3><ol>
+<li>全局安装在任何文件夹都可运行，原理是写进环境变量，每次在命令行中敲入命令时，根据环境变量的设置寻找对应的可执行程序运行</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">npm install -g &lt;package_name&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>局部安装就是在当前项目中建立包，在当前项目中起作用</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">npm install &lt;package_name&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-npm安装常用包的命令"><a href="#5-npm安装常用包的命令" class="headerlink" title="5. npm安装常用包的命令"></a>5. npm安装常用包的命令</h3><ol>
+<li>安装vue</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g vue</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装vue脚手架</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br><span class="line"></span><br><span class="line">// 安装指定版本的vue-cli(这个就不用全局安装了)</span><br><span class="line">npm install vue-cli@需要安装的版本号</span><br></pre></td></tr></table></figure>
+
+<p>查看所有的vue-cli版本号的命令：<code>npm  view vue-cli versions --json</code></p>
+<h2 id="Vue相关命令"><a href="#Vue相关命令" class="headerlink" title="Vue相关命令"></a>Vue相关命令</h2><h3 id="1-vue版本冲突的解决办法"><a href="#1-vue版本冲突的解决办法" class="headerlink" title="1. vue版本冲突的解决办法"></a>1. vue版本冲突的解决办法</h3><p>当本地安装的npm版本较高，造成无法解析Vue项目中的依赖树，进而导致项目依赖下载失败时，可尝试使用如下命令解决此问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --legacy-peer-deps</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-脚手架快速创建项目"><a href="#2-脚手架快速创建项目" class="headerlink" title="2. 脚手架快速创建项目"></a>2. 脚手架快速创建项目</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vue create 项目名称</span><br></pre></td></tr></table></figure>
+
+<p>注意：项目名称不能有大写字母</p>
+<h2 id="生成SSH密钥进行免密登录"><a href="#生成SSH密钥进行免密登录" class="headerlink" title="生成SSH密钥进行免密登录"></a>生成SSH密钥进行免密登录</h2><p>要设置SSH免密码登录，可以按照以下步骤进行操作：</p>
+<blockquote>
+<p>注意：以下命令是在本地电脑的PowerShell中运行的，并不是在命令提示符cmd中运行的</p>
+</blockquote>
+<ol>
+<li><p>生成公私钥对：首先，在本地计算机上生成公私钥对。可以使用以下命令生成，默认情况下会生成RSA密钥对。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后，会提示你选择密钥保存的路径和输入密码（留空代表无密码）。<strong>生成的公私钥文件分别是<code>id_rsa.pub</code>（公钥）和<code>id_rsa</code>（私钥）</strong>。</p>
+</li>
+<li><p>将公钥复制到目标服务器：将本地生成的公钥复制到目标服务器上的<code>~/.ssh/authorized_keys</code>文件中。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-copy-id user@server-ip</span><br></pre></td></tr></table></figure>
+
+<p>或者手动方式，将本地的公钥内容复制到目标服务器的<code>~/.ssh/authorized_keys</code>文件。</p>
+<p>如果在Win10或Win11上配置时出现下面错误：</p>
+<blockquote>
+<p>ssh-copy-id : 无法将“ssh-copy-id”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。</p>
+</blockquote>
+<p>解决方案是在PowerShell中先执行以下内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"> function ssh-copy-id([string]$userAtMachine, $args)&#123;   </span><br><span class="line">    $publicKey = &quot;$ENV:USERPROFILE&quot; + &quot;/.ssh/id_rsa.pub&quot;</span><br><span class="line">    if (!(Test-Path &quot;$publicKey&quot;))&#123;</span><br><span class="line">        Write-Error &quot;ERROR: failed to open ID file &#x27;$publicKey&#x27;: No such file&quot;            </span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        &amp; cat &quot;$publicKey&quot; | ssh $args $userAtMachine &quot;umask 077; test -d .ssh || mkdir .ssh ; cat &gt;&gt; .ssh/authorized_keys || exit 1&quot;      </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>验证免密码登录：尝试使用SSH登录目标服务器，应该不再需要输入密码。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh user@server-ip</span><br></pre></td></tr></table></figure>
+
+<p>如果一切配置正确，你应该能够直接登录到目标服务器，而无需输入密码。</p>
+</li>
+</ol>
+<p>需要注意的是，以上步骤假设你已经在服务器上设置了SSH服务，并且你拥有对目标服务器的登录凭证。</p>
+<p>另外，为了确保SSH连接的安全性，建议采取以下措施：</p>
+<ul>
+<li><p>设置私钥文件的权限：为了保护私钥的机密性，将私钥的权限设置为只有当前用户可读写，可以执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 600 ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>禁用密码登录：为了提高安全性，可以在目标服务器上禁用密码登录，只允许公钥登录。在SSH服务器配置文件（通常是<code>/etc/ssh/sshd_config</code>）中将<code>PasswordAuthentication</code>设置为<code>no</code>。然后重新加载SSH服务。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service sshd reload</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>这样，你就设置了SSH免密码登录，方便快捷地使用SSH连接目标服务器。</p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>pip</tag>
+        <tag>Anaconda</tag>
+        <tag>Git</tag>
+        <tag>Nodejs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>随笔-跨年当天的胡思乱想</title>
+    <url>/2023/12/31/%E9%9A%8F%E7%AC%94/</url>
+    <content><![CDATA[<h1 id="今天是2023年的最后一天"><a href="#今天是2023年的最后一天" class="headerlink" title="今天是2023年的最后一天"></a>今天是2023年的最后一天</h1><p>对跨年没什么兴趣，时的连续性是不变的，并不是说零点一过就有什么发了质的改变，今天也是和往常完全相同的一天，但是喜欢你，所以会对你说新年快乐。</p>
+<p>有人会说”情绪退步也就意味着不再年轻了“，但是我想说，该年轻的时候一样年轻</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>思考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>后端开发笔记</title>
+    <url>/2024/05/05/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>后端学习笔记</p>
+<span id="more"></span>
+
+<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><blockquote>
+<p>Bean：Spring Boot中的Bean是指由Spring容器管理的对象。这些Bean通常是应用程序中的各种组件，如服务、存储库、配置类等，它们由Spring容器进行创建、配置和管理。</p>
+<p>在Spring Boot应用程序中，可以通过在类上添加注解（如@Component、@Service、@Repository、@Controller等）来将一个类标记为一个Bean。Spring Boot会自动扫描这些注解，并在启动时将这些类实例化为Bean，然后将它们放入应用程序的上下文中，以便能够进行依赖注入和其他操作。</p>
+<p>总结： 在Spring Boot中，Bean是由Spring容器管理的对象，通过注解标记的类会被Spring容器实例化并放入应用程序上下文中，以便进行依赖注入和其他操作。</p>
+</blockquote>
+<h2 id="常用知识"><a href="#常用知识" class="headerlink" title="常用知识"></a>常用知识</h2><p>注解</p>
+<p>MVC：Model+View+Controller</p>
+<h3 id="1-控制器Controller"><a href="#1-控制器Controller" class="headerlink" title="1. 控制器Controller"></a>1. 控制器Controller</h3><h4 id="1-路由映射"><a href="#1-路由映射" class="headerlink" title="1. 路由映射"></a>1. 路由映射</h4><ul>
+<li>@RequestMapping</li>
+<li>Method匹配也可以使用@GetMapping、@PostMapping等注解代替</li>
+</ul>
+<h4 id="2-参数传递"><a href="#2-参数传递" class="headerlink" title="2. 参数传递"></a>2. 参数传递</h4><ul>
+<li>@RequestParam：将请求参数绑定到控制器的方法参数上，接收的参数来自 HTTP请求体或请求url的QueryString，当请求的参数名称与Controller的业务 方法参数名称一致时,@RequestParam可以省略</li>
+<li>@PathVaraible：用来处理动态的URL，URL的值可以作为控制器中处理方法 的参数</li>
+<li>@RequestBody：接收的参数是来自requestBody中，即请求体。一般用于处理 非 Content-Type: application&#x2F;x-www-form-urlencoded编码格式的数据， 比如：<code>application/json</code>、<code>application/xml</code>等类型的数据</li>
+</ul>
+<h4 id="3-数据响应"><a href="#3-数据响应" class="headerlink" title="3. 数据响应"></a>3. 数据响应</h4><h5 id="3-1-静态资源访问"><a href="#3-1-静态资源访问" class="headerlink" title="3.1 静态资源访问"></a>3.1 静态资源访问</h5><p>使用IDEA创建Spring Boot项目，会默认创建出classpath:&#x2F;static&#x2F;目录，静态 资源一般放在这个目录下即可。</p>
+<p>如果默认的静态资源过滤策略不能满足开发需求，也可以自定义静态资源过滤 策略。</p>
+<p>在application.properties中直接定义过滤规则和静态资源位置： </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">spring.mvc.<span class="keyword">static</span>-path-pattern=/<span class="keyword">static</span><span class="comment">/**</span></span><br><span class="line"><span class="comment">spring.web.resources.static-locations=classpath:/static/</span></span><br></pre></td></tr></table></figure>
+
+<p>过滤规则为&#x2F;static&#x2F;**，静态资源位置为classpath:&#x2F;static&#x2F;</p>
+<h5 id="3-2-SpringBoot实现文件上传功能"><a href="#3-2-SpringBoot实现文件上传功能" class="headerlink" title="3.2 SpringBoot实现文件上传功能"></a>3.2 SpringBoot实现文件上传功能</h5><p>Spring Boot工程嵌入的tomcat限制了请求的文件大小，每个文件的配置最大 为1Mb，单次请求的文件的总数不能大于10Mb。</p>
+<p>要更改这个默认值需要在配置文件（如application.properties）中加入两个配 置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">spring.servlet.multipart.max-file-size=10MB</span><br><span class="line">spring.servlet.multipart.max-request-size=10MB</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-3-拦截器"><a href="#3-3-拦截器" class="headerlink" title="3.3 拦截器"></a>3.3 拦截器</h5><p>拦截器在Web系统中非常常见，对于某些全局统一的操作，我们可以把它提取 到拦截器中实现。总结起来，拦截器大致有以下几种使用场景：</p>
+<p>权限检查：如登录检测，进入处理程序检测是否登录，如果没有，则直接返回 登录页面。</p>
+<p>性能监控：有时系统在某段时间莫名其妙很慢，可以通过拦截器在进入处理程 序之前记录开始时间，在处理完后记录结束时间，从而得到该请求的处理时间</p>
+<p>通用行为：读取cookie得到用户信息并将用户对象放入请求，从而方便后续流 程使用，还有提取Locale、Theme信息等，只要是多个处理程序都需要的，即 可使用拦截器实现。</p>
+<p><img src="/assets/image-20240117215856267.png" alt="image-20240117215856267"></p>
+<ul>
+<li>拦截器定义</li>
+</ul>
+<p><img src="/assets/image-20240117215938680.png" alt="image-20240117215938680"></p>
+<ul>
+<li>拦截器注册</li>
+</ul>
+<p><img src="/assets/image-20240117215951489.png" alt="image-20240117215951489"></p>
+<h3 id="2-Swagger"><a href="#2-Swagger" class="headerlink" title="2. Swagger"></a>2. Swagger</h3><blockquote>
+<p>什么是Swagger</p>
+</blockquote>
+<p>Swagger是一个规范和完整的框架，用于生成、描述、调用和可视化RESTful风 格的Web服务，是非常流行的API表达工具。</p>
+<p>Swagger能够自动生成完善的RESTful API文档，，同时并根据后台代码的修改 同步更新，同时提供完整的测试页面来调试API。</p>
+<h4 id="使用Swagger自动生成Web-API文档"><a href="#使用Swagger自动生成Web-API文档" class="headerlink" title="使用Swagger自动生成Web API文档"></a>使用Swagger自动生成Web API文档</h4><p>在Spring Boot项目中集成Swagger同样非常简单，只需在项目中引入 springfox-swagger2和springfox-swagger-ui依赖即可</p>
+<p><img src="/assets/image-20240117220519100.png" alt="image-20240117220519100"></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置Swagger"><a href="#配置Swagger" class="headerlink" title="配置Swagger"></a>配置Swagger</h4><p><img src="/assets/image-20240117220550397.png" alt="image-20240117220550397"></p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>Spring Boot 2.6.X后与Swagger有版本冲突问题，需要在 application.properties中加入以下配置：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">spring.mvc.pathmatch.matching-strategy=ant_path_matcher</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用Swagger进行接口测试"><a href="#使用Swagger进行接口测试" class="headerlink" title="使用Swagger进行接口测试"></a>使用Swagger进行接口测试</h4><p>启动项目访问 <a href="http://127.0.0.1:8080/swagger-ui.html">http://127.0.0.1:8080/swagger-ui.html</a> ，即可打开自动生成的 可视化测试页面</p>
+<h4 id="Swagger常用注解"><a href="#Swagger常用注解" class="headerlink" title="Swagger常用注解"></a>Swagger常用注解</h4><p><img src="/assets/image-20240117220814377.png" alt="image-20240117220814377"></p>
+<h2 id="开发环境热部署"><a href="#开发环境热部署" class="headerlink" title="开发环境热部署"></a>开发环境热部署</h2><ol>
+<li>在pom.xml配置文件中添加dev-tools依赖</li>
+</ol>
+<blockquote>
+<p>使用optional&#x3D;true表示依赖不会传递，即该项目依赖devtools；其他项目如 果引入此项目生成的JAR包，则不会包含devtools</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在application.properties中配置devtools</li>
+</ol>
+<p>添加如下代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 热部署生效</span></span><br><span class="line">spring.devtools.restart.enabled=<span class="literal">true</span></span><br><span class="line"><span class="comment">// 设置重启目录</span></span><br><span class="line">spring.devtools.restart.additional-paths=src/main/java</span><br><span class="line"><span class="comment">// 设置classpath目录下的WEB-INF文件夹内容修改下不重启</span></span><br><span class="line">spring.devtools.restart.exclude=<span class="keyword">static</span><span class="comment">/**</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>IDEA设置</li>
+</ol>
+<ul>
+<li>打开Settings页面，在左边的菜单栏依次找到 Build,Execution,Deployment→Compile，勾选Build project automatically</li>
+<li>新版本IDEA：在Setting页面，在左边的菜单栏找到Advanced ，勾选 Allow auto-make to start even if developed application is currently running复选框</li>
+<li>老版本IDEA：按Ctrl+Shift+Alt+&#x2F;快捷键调出Maintenance页面，单击Registry，勾选compile.automake.allow.when.app.running复选框。</li>
+<li>做完这两步配置之后，若开发者再次在IntelliJ IDEA中修改代码，则项目会自动 重启</li>
+</ul>
+<h2 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h2><p>项目创建成功后会默认在resources目录下生成application.properties文件。 该文件包含Spring Boot项目的全局配置</p>
+<h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><h3 id="调用XML文件中的SQL命令"><a href="#调用XML文件中的SQL命令" class="headerlink" title="调用XML文件中的SQL命令"></a>调用XML文件中的SQL命令</h3><p>在Spring Boot项目中，针对数据库的增删改查操作通常使用MyBatis等持久化框架来管理。而MyBatis通常会使用XML文件来封装SQL语句。你可以通过以下步骤来调用XML文件中的SQL命令：</p>
+<ol>
+<li><strong>定义Mapper接口：</strong> 首先，你需要定义一个Mapper接口，用于声明要调用的SQL语句。Mapper接口中的方法名称和XML文件中的SQL语句的ID相对应。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> &#123;</span><br><span class="line">    User <span class="title function_">findById</span><span class="params">(Long id)</span>; <span class="comment">// 方法名对应XML中的SQL语句的ID</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>编写XML文件：</strong> 接下来，你需要编写一个XML文件，用于定义SQL语句。在XML文件中，你可以定义增删改查等各种操作的SQL语句，并通过<code>&lt;select&gt;</code>、<code>&lt;insert&gt;</code>、<code>&lt;update&gt;</code>、<code>&lt;delete&gt;</code>等标签来标识不同类型的SQL操作。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- UserMapper.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.example.entity.User&quot;</span>&gt;</span></span><br><span class="line">        SELECT * FROM users WHERE id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>配置Mapper接口和XML文件：</strong> 在Spring Boot的配置文件中，你需要配置MyBatis来扫描Mapper接口和XML文件，并将它们关联起来。</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># application.yaml</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:com/example/mapper/*.xml</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>调用Mapper接口：</strong> 最后，在需要使用SQL语句的地方，你可以注入Mapper接口的实例，并调用接口中定义的方法来执行相应的SQL操作。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> User <span class="title function_">findUserById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> userMapper.findById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过以上步骤，你就可以在代码中调用XML文件中定义的SQL命令了。在实际应用中，你可以根据需要编写更多的SQL语句，并在Mapper接口中定义对应的方法，从而实现各种数据库操作。</p>
+<h3 id="常用用法和设置"><a href="#常用用法和设置" class="headerlink" title="常用用法和设置"></a>常用用法和设置</h3><p>MyBatis 是一个优秀的持久层框架，在开发过程中常用的用法和设置有很多，以下列举了一些常见的用法和设置：</p>
+<ol>
+<li><strong>XML映射文件：</strong> 使用 XML 文件来定义 SQL 映射，其中包含了 SQL 语句以及参数映射、结果映射等信息。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.example.entity.User&quot;</span>&gt;</span></span><br><span class="line">        SELECT * FROM users WHERE id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>注解方式：</strong> 除了 XML 文件外，还可以使用注解的方式来定义 SQL 映射，通过在方法上添加注解的方式来定义 SQL 语句。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> &#123;</span><br><span class="line">    <span class="meta">@Select(&quot;SELECT * FROM users WHERE id = #&#123;id&#125;&quot;)</span></span><br><span class="line">    User <span class="title function_">findById</span><span class="params">(Long id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>动态 SQL：</strong> MyBatis 提供了一套强大的动态 SQL 功能，可以在 SQL 中进行条件判断、循环等操作。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findByCondition&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.example.entity.User&quot;</span>&gt;</span></span><br><span class="line">    SELECT * FROM users</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;name != null and name != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            AND name = #&#123;name&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age != null&quot;</span>&gt;</span></span><br><span class="line">            AND age = #&#123;age&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>参数映射：</strong> MyBatis 支持多种参数映射方式，包括单个参数、多个参数、Map 参数、对象参数等。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findByCondition&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.example.entity.User&quot;</span>&gt;</span></span><br><span class="line">    SELECT * FROM users WHERE name = #&#123;name&#125; AND age = #&#123;age&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>结果映射：</strong> MyBatis 支持将查询结果映射为 Java 对象，可以通过属性名、别名、构造函数等方式进行结果映射。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;userResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.example.entity.User&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_id&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;name&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_name&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;age&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_age&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><strong>缓存：</strong> MyBatis 支持一级缓存和二级缓存，可以提高查询性能。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">cache</span> <span class="attr">eviction</span>=<span class="string">&quot;LRU&quot;</span> <span class="attr">flushInterval</span>=<span class="string">&quot;60000&quot;</span> <span class="attr">size</span>=<span class="string">&quot;512&quot;</span> <span class="attr">readOnly</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><strong>插件：</strong> MyBatis 支持自定义插件，在 SQL 执行前后进行一些额外的操作，如日志记录、性能监控等。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Intercepts(&#123;</span></span><br><span class="line"><span class="meta">    @Signature(type = Executor.class, method = &quot;update&quot;, args = &#123;MappedStatement.class, Object.class&#125;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExamplePlugin</span> <span class="keyword">implements</span> <span class="title class_">Interceptor</span> &#123;</span><br><span class="line">    <span class="comment">// 实现拦截逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><strong>动态数据源：</strong> MyBatis 支持动态切换数据源，可以根据不同的场景选择不同的数据源。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicDataSource</span> <span class="keyword">extends</span> <span class="title class_">AbstractRoutingDataSource</span> &#123;</span><br><span class="line">    <span class="comment">// 实现动态数据源的切换逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这些是 MyBatis 开发过程中常用的一些用法和设置，能够帮助开发人员更加灵活地使用 MyBatis 来操作数据库。</p>
+<h1 id="IDEA常用快捷键"><a href="#IDEA常用快捷键" class="headerlink" title="IDEA常用快捷键"></a>IDEA常用快捷键</h1><h2 id="1-快速生成基本函数"><a href="#1-快速生成基本函数" class="headerlink" title="1. 快速生成基本函数"></a>1. 快速生成基本函数</h2><p>生成getter、构造函数、重写toString函数的快捷键</p>
+<p>在IntelliJ IDEA中，可以使用以下快捷键快速生成构造方法、getter方法等：</p>
+<ol>
+<li><p><strong>生成构造方法：</strong> 在类的任何位置，例如类的开头或者类的内部，输入<code>Alt + Insert</code>（Windows&#x2F;Linux）或者<code>Cmd + N</code>（Mac），然后选择 “Constructor”，按下回车键。</p>
+</li>
+<li><p><strong>生成Getter和Setter方法：</strong> 同样在类的任何位置，输入<code>Alt + Insert</code>（Windows&#x2F;Linux）或者<code>Cmd + N</code>（Mac），然后选择 “Getter and Setter”，按下回车键。</p>
+</li>
+</ol>
+<p>这些快捷键会在代码中自动生成相应的构造方法、getter和setter方法，并根据类中的字段进行适当的生成。</p>
+<h2 id="2-快速生成main函数"><a href="#2-快速生成main函数" class="headerlink" title="2. 快速生成main函数"></a>2. 快速生成main函数</h2><p>在IntelliJ IDEA中，可以使用以下快捷键快速生成main方法：</p>
+<ol>
+<li>在类的任何位置，例如类的开头或者类的内部，输入<code>psvm</code>，然后按下<code>Tab</code>键。</li>
+</ol>
+<p>这个快捷键会自动补全为：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样你就可以直接在<code>main</code>方法中编写代码了。</p>
+<h2 id="3-快速生成多行注释"><a href="#3-快速生成多行注释" class="headerlink" title="3. 快速生成多行注释"></a>3. 快速生成多行注释</h2><p>在IntelliJ IDEA中，快速生成多行注释的快捷键是 <code>Ctrl + Shift + /</code>（Windows&#x2F;Linux）或者 <code>Cmd + Shift + /</code>（Mac）。这个快捷键会在当前光标位置插入多行注释。</p>
+<p>如果想要在一个函数前添加多行注释并快速生成函数参数的多行注释，可以按照以下步骤：</p>
+<ol>
+<li>将光标放置在函数定义的上方，即函数的第一行。</li>
+<li>使用快捷键 <code>Ctrl + Shift + /</code>（Windows&#x2F;Linux）或者 <code>Cmd + Shift + /</code>（Mac）插入多行注释。</li>
+<li><strong>在多行注释中，使用 <code>/**</code> 开始，并按下回车键。</strong></li>
+<li>IntelliJ IDEA会自动生成多行注释的模板，并在模板中包含了函数的参数信息，可以根据需要修改参数说明。</li>
+<li>编写完毕后，按下回车键即可。</li>
+</ol>
+<p>这样就可以快速生成函数参数的多行注释了。</p>
+<h2 id="4-快速生成print语句"><a href="#4-快速生成print语句" class="headerlink" title="4. 快速生成print语句"></a>4. 快速生成print语句</h2><p>输入<code>sout</code>，然后回车即可快速生成</p>
+<h1 id="开发知识"><a href="#开发知识" class="headerlink" title="开发知识"></a>开发知识</h1><h2 id="POLO及其转换-PO、DO、DTO、VO"><a href="#POLO及其转换-PO、DO、DTO、VO" class="headerlink" title="POLO及其转换-PO、DO、DTO、VO"></a>POLO及其转换-PO、DO、DTO、VO</h2><p><a href="https://zhuanlan.zhihu.com/p/94931336">资料链接</a></p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>**DTO(Data Transfer Object)**：数据传输对象,原先是为分布式提供粗粒度的数据实体，减少调用次数来提升性能和降低网络压力。</p>
+<p>**VO(view object)**：可视层对象，用于给前端显示的对象。(只传递有需要的参数以保障数据安全)</p>
+<p>**DO(Domain Object)**：领域对象，一般和数据中的表结构对应。</p>
+<p>**PO(Persistent Object)**：持久化对象,是一种 o&#x2F;r 映射关系，可以看成是数据库表到java对象的映射。</p>
+<h3 id="概括"><a href="#概括" class="headerlink" title="概括"></a><strong>概括</strong></h3><p><strong>DTO</strong>:前端给后端传递的数据</p>
+<p><strong>VO</strong>:后端给前端传递的数据</p>
+<p><strong>DO</strong>:数据库表结构</p>
+<p><strong>PO</strong>:数据库表结构到JAVA的映射类</p>
+<p>一般我们使用Mybatis建的类为PO,控制器接受到前端发来的参数为DTO,给前端发送的安全的数据为VO。如果数据类不做映射处理关系时PO&#x3D;DO</p>
+<h2 id="知识点汇总"><a href="#知识点汇总" class="headerlink" title="知识点汇总"></a>知识点汇总</h2><ol>
+<li><p>线程信息BaseContext：客户端发起的每一次请求都会是一个单独的线程，因此可以使用LocalThread存储每次线程中的信息</p>
+</li>
+<li><p>Web全局配置类WebMvcConfigration：在全局的配置类里进行注册（自定义方法），这些全局的配置包括：</p>
+<ul>
+<li><p>自定拦截器——在拦截器中设置固定请求路径的jwt令牌校验</p>
+<blockquote>
+<p>在进行jwt令牌校验时会解析当前登录用户的Token，获取登录用户ID并存储到LocalThread中进行保存，这样便可即时获取当前登录用户的ID</p>
+</blockquote>
+</li>
+<li><p>通过knife4j生成接口文档</p>
+</li>
+<li><p>设置静态资源映射</p>
+</li>
+<li><p>扩展消息转换器——对Java对象进行序列化处理（转换为JSON对象）</p>
+</li>
+</ul>
+</li>
+<li><p>全局异常处理器Handler：针对后端报错而前端无法提示的情况，在后端设置异常处理器，对异常信息进行封装并传递给前端进行提示</p>
+</li>
+<li><p>jwt令牌校验拦截器JwtTokenAdminInterpreter：获取用户登录的令牌并校验，来决定是否放行</p>
+</li>
+<li><p>将后端返回对象统一封装在包result中，用泛型增强可用性，操作结果封装为Result类，分页查询结果封装为PageResult</p>
+</li>
+<li><p>将常量类存统一放在包constant下，分为MessageConstant、StatusConstant、PasswordConstant、JwtClaimsConstant等</p>
+</li>
+<li><p>将异常捕获信息统一放在包exception下</p>
+</li>
+</ol>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>AOP（面向切面编程）是一种编程范例，它允许开发者定义和使用横切关注点（cross-cutting concerns）。</p>
+<p>横切关注点是指影响应用程序多个部分的功能，比如日志记录、事务管理、性能统计等。这些功能与应用程序的核心业务逻辑部分相对独立，但却会影响到多个模块。</p>
+<p>AOP 的主要思想是将这些横切关注点从原始模块中分离出来，形成切面（aspect）。切面是横切关注点的模块化体现，它可以定义在多个模块中共享的行为，并将这些行为与核心业务逻辑解耦。</p>
+<p>AOP 的实现通常是通过在特定的切入点（join point）上执行特定的动作（advice）。切入点通常是在应用程序的执行过程中可以插入切面的地方，比如方法执行前、方法执行后等。而动作通常包括在切入点处执行的代码逻辑，比如日志记录、事务管理等。</p>
+<p>Spring 框架提供了强大的 AOP 支持，可以通过声明式的方式来定义切面，并将其与应用程序的核心业务逻辑进行结合。</p>
+<p>以下是一个简单的 Java AOP 示例，使用 Spring 框架的 AOP 功能来实现方法执行前后的日志记录：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Aspect;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Before;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.After;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoggingAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before(&quot;execution(* com.example.service.*.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logBefore</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Before executing the method&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After(&quot;execution(* com.example.service.*.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logAfter</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;After executing the method&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 执行核心业务逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，LoggingAspect 类定义了两个切面，分别在 MyService 类的方法执行前后执行日志记录的动作。</p>
+<h1 id="注解汇总"><a href="#注解汇总" class="headerlink" title="注解汇总"></a>注解汇总</h1><h2 id="Java原生注解"><a href="#Java原生注解" class="headerlink" title="Java原生注解"></a>Java原生注解</h2><h3 id="Override"><a href="#Override" class="headerlink" title="@Override"></a>@Override</h3><p><code>@Override</code> 是 Java 中的一个注解，它用于标识一个方法是覆盖（重写）父类的方法。当一个方法添加了 <code>@Override</code> 注解时，编译器会检查该方法是否真的覆盖了父类中的一个方法，如果没有，则会报编译错误。</p>
+<p>该注解通常用于增加代码的可读性和可维护性，因为它能够明确地表明一个方法是在覆盖父类的方法。这有助于其他开发者更容易地理解代码结构和继承关系。</p>
+<p>总结： <code>@Override</code> 注解用于标识一个方法是在覆盖父类的方法，以增加代码的可读性和可维护性。</p>
+<h2 id="Spring框架注解"><a href="#Spring框架注解" class="headerlink" title="Spring框架注解"></a>Spring框架注解</h2><h3 id="Autowired：自动装配"><a href="#Autowired：自动装配" class="headerlink" title="@Autowired：自动装配"></a>@Autowired：自动装配</h3><p><code>@Autowired</code> 是 Spring Framework 中的一个注解，用于自动装配Bean。当一个类上标注了<code>@Autowired</code>注解时，Spring容器会在上下文（Context）中寻找匹配的Bean，并自动注入到需要的地方。这样可以简化代码，避免显式地进行Bean的实例化和依赖注入。</p>
+<p>在给定的代码中，<code>@Autowired</code> 注解用于标记 <code>EmployeeService</code> 和 <code>JwtProperties</code> 两个类的实例化，这样在<code>EmployeeController</code>类中就可以直接使用这两个实例，而不需要手动创建它们。</p>
+<p>总结：<code>@Autowired</code> 注解用于自动装配Bean，简化了bean的实例化和依赖注入。</p>
+<h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><p><code>@Component</code> 是 Spring Framework 中的注解，它用于标识一个类作为 Spring 组件，并由 Spring 运行时管理。被标记为 <code>@Component</code> 的类将被自动检测并注册为 Spring 应用程序上下文中的 Bean。这意味着可以在其他组件中自动注入该类的实例，并且可以通过 Spring 上下文进行管理。</p>
+<p>这个注解通常用于将业务逻辑、持久性实体、服务等标记为 Spring 管理的组件。</p>
+<p>总结：<code>@Component</code> 的主要功能是标识一个类为 Spring 组件，并将其纳入 Spring 的管理和依赖注入体系中。</p>
+<blockquote>
+<p><code>@Component</code> 和 <code>@Autowired</code> 注解是 Spring 框架中常用的注解，用于实现依赖注入和组件扫描。它们之间的区别在于它们的作用和使用场景。</p>
+<h3 id="Component-注解"><a href="#Component-注解" class="headerlink" title="@Component 注解"></a>@Component 注解</h3><p><code>@Component</code> 注解是 Spring 框架中最通用的注解之一，用于标识一个类为 Spring 组件。通常用于将类标记为受 Spring 管理的 bean，并且让 Spring 自动扫描和识别这些组件。这样可以在其他地方通过依赖注入的方式使用这些组件。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="comment">// Class body</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Autowired-注解"><a href="#Autowired-注解" class="headerlink" title="@Autowired 注解"></a>@Autowired 注解</h3><p><code>@Autowired</code> 注解用于自动装配被 <code>@Component</code> 或其他特定注解标记的 Spring bean，并且通常用于实现依赖注入。通过 <code>@Autowired</code> 注解，我们可以告诉 Spring 在需要某个类型的 bean 时，自动将合适的实例注入进来。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyOtherClass</span> &#123;</span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> MyClass myClass;</span><br><span class="line"><span class="comment">// Class body</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ul>
+<li><code>@Component</code> 用于标识一个类为 Spring 组件，让 Spring 可以识别和管理这些组件。</li>
+<li><code>@Autowired</code> 用于自动装配标记为 <code>@Component</code> 的 Spring bean，实现依赖注入。</li>
+</ul>
+<p>需要注意的是，<code>@Autowired</code> 注解通常与 <code>@Component</code> 注解一起使用，以实现依赖注入，但它也可以与其他一些标记为 <code>@Component</code> 的特定注解一起使用，例如 <code>@Service</code>、<code>@Repository</code> 等。</p>
+</blockquote>
+<h3 id="ExceptionHandler"><a href="#ExceptionHandler" class="headerlink" title="@ExceptionHandler"></a>@ExceptionHandler</h3><p><code>@ExceptionHandler</code> 是Spring Framework中的一个注解，用于声明一个方法是一个异常处理器。当一个控制器中的方法抛出了特定类型的异常时，被<code>@ExceptionHandler</code>注解所标记的方法将会被调用来处理这个异常。</p>
+<p>具体来说，<code>@ExceptionHandler</code>注解可以在<code>@Controller</code>或<code>@RestController</code>类中的方法上使用。标记的方法必须返回一个用于表示错误或异常信息的对象，例如<code>ResponseEntity</code>或简单的对象类型。</p>
+<p>这样的注解提供了一种集中管理和处理异常情况的方法，让开发人员能够更容易地对不同种类的异常进行处理。</p>
+<p>总结：<code>@ExceptionHandler</code> 注解用于声明一个方法是一个异常处理器，在控制器中用于捕获特定类型的异常并进行处理。</p>
+<h3 id="RestControllerAdvice"><a href="#RestControllerAdvice" class="headerlink" title="@RestControllerAdvice"></a>@RestControllerAdvice</h3><p><code>@RestControllerAdvice</code> 是一个注解，用于定义一个全局性的异常处理器。当使用 Spring MVC 或 Spring WebFlux 进行开发时，可以使用 <code>@RestControllerAdvice</code> 注解来定义一个统一的异常处理类，用于捕获处理在控制器中抛出的异常。</p>
+<p>这个注解通常与 <code>@ExceptionHandler</code> 注解一起使用，用于指定处理特定异常的方法。通过 <code>@ExceptionHandler</code> 注解，您可以定义一个或多个方法来处理特定类型的异常，从而实现全局的异常处理。</p>
+<p>总结：<code>@RestControllerAdvice</code> 注解用于定义全局异常处理器，可以通过 <code>@ExceptionHandler</code> 注解来指定处理特定异常的方法。</p>
+<h2 id="Mybatis相关注解"><a href="#Mybatis相关注解" class="headerlink" title="Mybatis相关注解"></a>Mybatis相关注解</h2><h3 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h3><p><code>@Mapper</code> 是一个注解，通常用于标识一个接口为 MyBatis 的映射器接口。在这种情况下，被注解的接口将由 MyBatis 框架自动创建其实现类。</p>
+<p>这个注解告诉 MyBatis 在运行时为这个接口创建一个代理对象，以便使用 SQL 查询数据库，并将查询结果映射到 Java 对象上。</p>
+<p>当应用程序需要与数据库交互时，<code>@Mapper</code> 注解的接口将负责定义数据库操作的方法。</p>
+<p>代码总结： <code>@Mapper</code> 注解标识了这个接口为 MyBatis 的映射器接口，它将由 MyBatis 框架自动创建其实现类。主要功能是定义数据库操作的方法，以便在应用程序中与数据库进行交互。</p>
+<h2 id="Lombok库注解"><a href="#Lombok库注解" class="headerlink" title="Lombok库注解"></a>Lombok库注解</h2><h3 id="Data"><a href="#Data" class="headerlink" title="@Data"></a>@Data</h3><p>这个注解是 Lombok 提供的，用于自动生成类中的常规方法，如 <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code> 等。通过在类上添加 <code>@Data</code> 注解，Lombok 将会自动生成这些常规方法，使代码更加简洁。</p>
+<h3 id="Slf4j"><a href="#Slf4j" class="headerlink" title="@Slf4j@"></a>@Slf4j@</h3><p><code>@Slf4j</code>是Lombok库中的一个注解，用于日志记录。它会在类中生成一个名为<code>log</code>的日志记录器字段，这样你就可以在类内部使用它来记录日志，而无需显式实例化一个日志记录器对象。这简化了向代码中添加日志记录语句的过程。实际的日志记录输出取决于所使用的底层日志记录框架，比如Log4j或Logback。</p>
+<p>总结代码：</p>
+<ul>
+<li><code>@Slf4j</code>注解用于自动生成一个名为<code>log</code>的日志记录器字段。</li>
+<li>这个日志记录器被用于在<code>EmployeeController</code>类的不同部分记录日志，有助于调试、监控和理解应用程序的流程。</li>
+</ul>
+<p>总的来说，给定代码中<code>@Slf4j</code>注解的主要目的是通过自动生成一个日志记录器字段，启用<code>EmployeeController</code>类内的日志记录，从而有助于跟踪类的行为，帮助调试和监控与员工管理相关的活动。</p>
+<h2 id="Controller相关注解"><a href="#Controller相关注解" class="headerlink" title="Controller相关注解"></a>Controller相关注解</h2><h3 id="RestController"><a href="#RestController" class="headerlink" title="@RestController"></a>@RestController</h3><blockquote>
+<p>标识一个类是控制器，然后才可以在下面指定前端的请求路径，在RequestMapping指定路径前缀，PostMapping&#x2F;GetMapping中指定特定的函数路径</p>
+</blockquote>
+<p><code>@RestController</code> 是一个 Spring 框架提供的注解，它被<strong>用来标识一个类，表示这个类是一个 RESTful 服务的控制器</strong>。在 Spring MVC 应用中，使用 <code>@RestController</code> 注解的类将会自动将其返回的对象转换为 JSON 或 XML 响应，从而作为 HTTP 响应发送给客户端。</p>
+<p>它的主要目的是简化 RESTful 服务的开发，并且相比传统的<code>@Controller</code> 注解，不需要在每个方法上使用 <code>@ResponseBody</code> 注解来指示返回数据值。</p>
+<p>此注解表明类的实例将用作 RESTful 服务的控制器，并负责处理传入的 HTTP 请求，以及生成对应的 HTTP 响应数据。</p>
+<p>总结：<code>@RestController</code> 注解用于标识一个类，表示这个类是一个 RESTful 服务的控制器，简化了 RESTful 服务的开发，不需要在每个方法上使用 <code>@ResponseBody</code> 注解。</p>
+<h3 id="PathVariable"><a href="#PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><blockquote>
+<p>意思就是说当前端传入路径中包含需要的信息时，需要用这个注解把URL中的变量绑定到函数的形参中</p>
+</blockquote>
+<p><code>@PathVariable</code>注解用于Spring框架中的控制器方法中，它用于将URL模板中的变量绑定到方法的参数上。</p>
+<p>当使用<code>@PathVariable</code>注解时，Spring框架将根据变量名将URL模板中对应的值注入到方法的参数中，以便在方法体内使用。</p>
+<h2 id="Mapping相关注解"><a href="#Mapping相关注解" class="headerlink" title="Mapping相关注解"></a>Mapping相关注解</h2><p>Spring MVC是一个用于构建Web应用程序的开源框架，它提供了一种灵活且强大的方式来创建基于Java的Web应用程序。其中，Mapping注解用于将HTTP请求映射到相应的处理方法上。Spring MVC提供了多种Mapping注解，以下是它们的详细介绍：</p>
+<p>@GetMapping、PostMapping、PutMapping、DeleteMapping、PatchMapping</p>
+<ol>
+<li><p><code>@RequestMapping</code>: <code>@RequestMapping</code> 是最常用的Mapping注解，用于将HTTP请求映射到指定的处理方法上。它支持多种属性，如<code>value</code>、<code>method</code>、<code>params</code>和<code>headers</code>，用于定义不同的映射条件。例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sayHello</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>@GetMapping</code>、<code>@PostMapping</code>、<code>@PutMapping</code>、<code>@DeleteMapping</code>、<code>@PatchMapping</code>: 这些注解是<code>@RequestMapping</code>的快捷方式，用于分别将HTTP的GET、POST、PUT、DELETE和PATCH请求映射到处理方法上。例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sayHello</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@PostMapping(&quot;/create&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">create</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;created&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>@RequestParam</code>: <code>@RequestParam</code> 用于将HTTP请求中的参数映射到处理方法的参数上。可以指定参数名、是否必须、默认值等属性。例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUser</span><span class="params">(<span class="meta">@RequestParam(&quot;id&quot;)</span> Long userId)</span> &#123;</span><br><span class="line">        <span class="comment">// 使用userId参数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;user&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>@PathVariable</code>: <code>@PathVariable</code> 用于将URL中的占位符部分映射到处理方法的参数上。例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long userId)</span> &#123;</span><br><span class="line">        <span class="comment">// 使用userId参数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;user&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>@RequestHeader</code>: <code>@RequestHeader</code> 用于将HTTP请求的头部信息映射到处理方法的参数上。例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user-agent&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUserAgent</span><span class="params">(<span class="meta">@RequestHeader(&quot;User-Agent&quot;)</span> String userAgent)</span> &#123;</span><br><span class="line">        <span class="comment">// 使用userAgent参数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;user-agent&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>通过使用这些Mapping注解，可以方便地定义Spring MVC中的请求映射关系，使得Web应用程序的处理方法更加清晰和易于维护。</p>
+<h3 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><p><code>@RequestMapping</code> 是 Spring MVC 提供的一个注解，它用于将 HTTP 请求映射到 MVC 和 REST 控制器的处理方法。它可以用在类级别或方法级别。</p>
+<p>类级别的 <code>@RequestMapping</code> 注解指定了该控制器中所有请求处理方法的基本 URL 路径。在这个例子中，类级别的 <code>@RequestMapping(&quot;/admin/employee&quot;)</code> 指定了所有请求处理方法的基本 URL 路径为 “&#x2F;admin&#x2F;employee”。</p>
+<p>方法级别的 <code>@RequestMapping</code> 注解则用于将特定的 HTTP 请求映射到对应的处理方法。在该例子中，<code>@PostMapping(&quot;/login&quot;)</code> 和 <code>@PostMapping(&quot;/logout&quot;)</code> 分别将 HTTP POST 请求映射到 <code>login()</code> 和 <code>logout()</code> 方法。</p>
+<p>总结： <code>@RequestMapping</code> 注解用于将 HTTP 请求映射到控制器处理方法，可以用在类级别或方法级别。</p>
+<p><strong>类级别</strong>的 <code>@RequestMapping(&quot;/admin/employee&quot;)</code> 指定了基本 URL 路径</p>
+<p><strong>方法级别</strong>的 <code>@PostMapping(&quot;/login&quot;)</code> 和 <code>@PostMapping(&quot;/logout&quot;)</code> 分别映射了 HTTP POST 请求到对应的处理方法。</p>
+<h3 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h3><p><code>@RequestBody</code> 是Spring框架中用来<strong>绑定 HTTP 请求体到方法参数的注解</strong>。当一个请求被发送到一个处理方法时，Spring会尝试将请求的内容映射到被 <code>@RequestBody</code> 注解标注的方法参数上。这个注解通常用于处理 POST 请求，将请求体中的数据绑定到方法参数上，以便后续处理。</p>
+<p>这个注解在上下文中的代码中被使用在 <code>login</code> 方法的 <code>employeeLoginDTO</code> 参数上。它指示Spring将请求体中的数据绑定到这个参数对象上，这样在 <code>login</code> 方法中就可以直接使用这个对象来处理请求中的数据。</p>
+<p>总结：<code>@RequestBody</code> 注解用于绑定 HTTP 请求体到方法参数，在这个代码中用于将 POST 请求中的数据绑定到 <code>login</code> 方法的 <code>employeeLoginDTO</code> 参数上，以便后续处理员工登录操作。</p>
+<h2 id="Swagger相关注解"><a href="#Swagger相关注解" class="headerlink" title="Swagger相关注解"></a>Swagger相关注解</h2><h3 id="Api"><a href="#Api" class="headerlink" title="@Api"></a>@Api</h3><p>用在Controller层中，针对<code>类</code>进行解释</p>
+<h3 id="ApiOperation"><a href="#ApiOperation" class="headerlink" title="@ApiOperation"></a>@ApiOperation</h3><p>用在Controller层中，针对<code>类方法</code>进行解释</p>
+<h3 id="ApiModel"><a href="#ApiModel" class="headerlink" title="@ApiModel"></a>@ApiModel</h3><p>用在DTO层中，针对<code>类</code>进行解释</p>
+<p><code>@ApiModel(description = &quot;员工登录时传递的数据模型&quot;)</code> 注解： 这个注解来自于 Swagger，用于对类进行说明和描述。在这里，它描述了 EmployeeLoginDTO 类，指明其用途是用于员工登录时传递的数据模型。</p>
+<h3 id="ApiModelProperty"><a href="#ApiModelProperty" class="headerlink" title="@ApiModelProperty"></a>@ApiModelProperty</h3><p>用在DTO层中，针对<code>类属性</code>进行解释</p>
+<p>字段&#x2F;属性注解，Swagger来描述类的属性变量</p>
+<h2 id="异常相关注解"><a href="#异常相关注解" class="headerlink" title="异常相关注解"></a>异常相关注解</h2><h3 id="ExceptionHandler-1"><a href="#ExceptionHandler-1" class="headerlink" title="@ExceptionHandler"></a>@ExceptionHandler</h3><p><code>@ExceptionHandler</code>是Spring框架中用于处理异常的注解。它是用在方法上的注解，用于指示一个特定的方法可以处理特定类型的异常。当被注解的方法捕获到对应的异常类型时，将会被调用来处理该异常。</p>
+<p>这个注解可以出现在Controller中的方法上，也可以出现在全局异常处理器（如上下文中的 <code>GlobalExceptionHandler</code> 类）中的方法上。</p>
+<p>总结：<code>@ExceptionHandler</code>用于标识一个方法可以处理特定类型的异常，被用于全局异常处理器中的方法，以提供对特定类型异常的处理逻辑。</p>
+<h1 id="Java语法"><a href="#Java语法" class="headerlink" title="Java语法"></a>Java语法</h1><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>Java泛型是一种在编译时进行类型检查和类型安全的机制，它允许在类、接口、方法等中使用参数化类型。泛型的引入使得代码更加灵活、可重用，并提高了代码的安全性。</p>
+<h3 id="泛型语法和机制："><a href="#泛型语法和机制：" class="headerlink" title="泛型语法和机制："></a>泛型语法和机制：</h3><ol>
+<li><strong>泛型类（Generic Class）：</strong> 泛型类是指<strong>具有一个或多个类型参数的类</strong>。类型参数在类名后用尖括号<code>&lt;&gt;</code>括起来，并在类的定义中使用。例如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyGenericClass</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setValue</span><span class="params">(T value)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">getValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>泛型方法（Generic Method）：</strong> 泛型方法是指在方法声明中带有类型参数的方法。类型参数可以在方法的返回类型前面声明，并在方法体中使用。例如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">myGenericMethod</span><span class="params">(T value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>泛型接口（Generic Interface）：</strong> 泛型接口是指具有一个或多个类型参数的接口。类型参数在接口名后用尖括号<code>&lt;&gt;</code>括起来，并在接口的定义中使用。例如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MyGenericInterface</span>&lt;T&gt; &#123;</span><br><span class="line">    T <span class="title function_">getValue</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setValue</span><span class="params">(T value)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>通配符（Wildcard）：</strong> 通配符用于表示泛型类型的一种不确定类型。<code>?</code>表示未知类型，可以用在声明、实例化和方法调用中。例如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;?&gt; myList; <span class="comment">// 声明一个未知类型的List</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>限定通配符（Bounded Wildcard）：</strong> 限定通配符用于限制泛型类型的范围。<code>&lt;? extends T&gt;</code>表示某个未知类型，必须是<code>T</code>或者<code>T</code>的子类型；<code>&lt;? super T&gt;</code>表示某个未知类型，必须是<code>T</code>或者<code>T</code>的父类型。</li>
+</ol>
+<h3 id="泛型原理："><a href="#泛型原理：" class="headerlink" title="泛型原理："></a>泛型原理：</h3><p>Java泛型的实现是通过<strong>类型擦除（Type Erasure）</strong>来实现的。在编译时，所有的<strong>泛型类型都会被擦除为它们的上界（对于没有指定上界的类型，使用<code>Object</code>作为上界），并插入必要的类型转换以保持类型安全</strong>。这意味着在运行时，泛型类型信息是不可用的，只有在编译时才会进行类型检查。</p>
+<h3 id="自定义泛型示例："><a href="#自定义泛型示例：" class="headerlink" title="自定义泛型示例："></a>自定义泛型示例：</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Pair</span>&lt;T, U&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T first;</span><br><span class="line">    <span class="keyword">private</span> U second;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Pair</span><span class="params">(T first, U second)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.first = first;</span><br><span class="line">        <span class="built_in">this</span>.second = second;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">getFirst</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> first;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFirst</span><span class="params">(T first)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.first = first;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> U <span class="title function_">getSecond</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> second;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setSecond</span><span class="params">(U second)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.second = second;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Pair&lt;String, Integer&gt; pair = <span class="keyword">new</span> <span class="title class_">Pair</span>&lt;&gt;(<span class="string">&quot;Hello&quot;</span>, <span class="number">123</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">first</span> <span class="operator">=</span> pair.getFirst(); <span class="comment">// 获取第一个元素</span></span><br><span class="line">        <span class="type">Integer</span> <span class="variable">second</span> <span class="operator">=</span> pair.getSecond(); <span class="comment">// 获取第二个元素</span></span><br><span class="line">        System.out.println(<span class="string">&quot;First: &quot;</span> + first + <span class="string">&quot;, Second: &quot;</span> + second);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，我们定义了一个泛型类<code>Pair</code>，它有两个类型参数<code>T</code>和<code>U</code>，表示一对值的类型。通过使用泛型，我们可以<strong>在创建<code>Pair</code>对象时指定不同类型的元素，并且在使用时编译器会进行类型检查，确保类型的一致性和安全性。</strong></p>
+<h2 id="详解Java注解机制"><a href="#详解Java注解机制" class="headerlink" title="详解Java注解机制"></a>详解Java注解机制</h2><h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><p>Java注解（Annotation）是一种元数据，它提供了关于程序代码其他部分的信息。它们可以在类、方法、变量等元素上声明，用于提供额外的信息，而这些信息可以被编译器、解释器或者其他工具读取和利用。注解以<code>@</code>符号开始，后跟注解的名称和一对括号，括号中可以包含一些参数。</p>
+<p>Java注解机制的关键点如下：</p>
+<ol>
+<li><strong>声明注解：</strong> 注解的声明使用 <code>@interface</code> 关键字，类似于接口的声明。可以在注解中定义一些元素，这些元素在使用时需要提供值。例如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p><strong>内置注解：</strong> Java提供了一些内置的注解，例如 <code>@Override</code>、<code>@Deprecated</code>、<code>@SuppressWarnings</code> 等，它们在编写代码时能够提供一些额外的信息或者告诉编译器执行一些特定的行为。</p>
+</li>
+<li><p><strong>元注解：</strong> 元注解是可以应用到其他注解上的注解，用来指定注解如何使用。Java中有几种内置的元注解，例如 <code>@Target</code>、<code>@Retention</code>、<code>@Documented</code>、<code>@Inherited</code> 等，它们用于控制注解的作用范围、保留策略、文档生成等。</p>
+</li>
+<li><p><strong>使用注解：</strong> 使用注解时，将注解放在目标元素的前面。例如，在类、方法、变量上使用注解：</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@MyAnnotation(&quot;SomeValue&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MyAnnotation(&quot;MethodValue&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myMethod</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// Method body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MyAnnotation(&quot;FieldValue&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String myField;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p><strong>解析注解：</strong> 使用Java反射机制可以在运行时解析注解，并根据注解中的信息做相应的处理。可以获取类、方法、字段等上的注解，并根据注解的信息进行业务逻辑的处理。</p>
+</li>
+<li><p><strong>自定义注解处理器：</strong> 可以通过自定义注解处理器，对代码中的注解进行处理，生成一些辅助代码或者进行其他操作。Java提供了 <code>javax.annotation.processing</code> 包来支持自定义注解处理器的开发。</p>
+</li>
+</ol>
+<p>总的来说，Java注解机制提供了一种优雅的方式来为代码添加元数据，可以用于提供配置信息、在编译时进行检查、生成文档等各种用途，提高了代码的灵活性和可维护性。</p>
+<h3 id="注解机制实现的原理"><a href="#注解机制实现的原理" class="headerlink" title="注解机制实现的原理"></a>注解机制实现的原理</h3><p>Java注解的实现原理涉及到编译器、反射、注解处理器等多个方面。</p>
+<ol>
+<li><p><strong>编译器处理注解：</strong> 当编译器在编译Java源代码时遇到了注解，它会根据注解的类型和位置执行相应的操作。例如，编译器可能会根据注解来生成额外的代码、执行某些检查或者修改编译过程中的行为。</p>
+</li>
+<li><p><strong>注解的元数据存储：</strong> 在编译过程中，注解的元数据会被存储在编译后的字节码文件中。这些元数据包括注解的类型、属性值等信息。</p>
+</li>
+<li><p><strong>反射读取注解：</strong> 在运行时，可以使用Java的反射机制来读取字节码文件中的注解信息。通过反射，可以获取类、方法、字段等元素上的注解，并根据注解中的信息执行相应的逻辑。</p>
+</li>
+<li><p><strong>注解处理器处理注解：</strong> 注解处理器是一种特殊的工具，用于在编译时处理注解。它可以读取源代码中的注解信息，并根据注解的内容执行一些特定的操作，例如生成额外的代码、执行某些检查等。注解处理器通常会在编译过程中被自动调用，它们可以通过Java编译器提供的API来访问源代码和注解信息，并生成相应的输出。</p>
+</li>
+</ol>
+<p>总的来说，Java注解的实现原理主要涉及到编译器、反射、注解处理器等多个方面。编译器在编译过程中处理注解并将其元数据存储在字节码文件中，而在运行时可以使用反射机制读取注解信息。同时，注解处理器可以在编译时处理注解，并根据注解的内容执行相应的操作。这些机制共同实现了Java注解的功能，使得注解成为了Java编程中的重要特性。</p>
+<h2 id="详解Java反射机制"><a href="#详解Java反射机制" class="headerlink" title="详解Java反射机制"></a>详解Java反射机制</h2><p>Java的反射机制是指在运行时<strong>动态地获取类的信息、调用对象的方法、操作对象的属性等能力</strong>。通过反射，可以在程序运行时检查类的结构，并在不知道类的具体类型的情况下，动态地创建对象、调用方法、访问属性等。Java的反射机制主要通过<code>java.lang.reflect</code>包中的类和接口来实现。</p>
+<h3 id="Java反射机制的主要组成部分："><a href="#Java反射机制的主要组成部分：" class="headerlink" title="Java反射机制的主要组成部分："></a>Java反射机制的主要组成部分：</h3><ol>
+<li><p><strong>Class类：</strong> <code>java.lang.Class</code>类是Java反射机制的核心类之一，它表示一个类的类型。在Java中，每个类都有一个对应的<code>Class</code>对象，可以通过类的静态方法<code>Class.forName(&quot;className&quot;)</code>或者对象的<code>getClass()</code>方法来获取。<code>Class</code>类提供了许多方法，可以用于获取类的信息，如获取类的构造方法、方法、字段等。</p>
+</li>
+<li><p><strong>Constructor类和Method类：</strong> <code>java.lang.reflect.Constructor</code>类和<code>java.lang.reflect.Method</code>类分别表示类的构造方法和方法。它们提供了一系列的方法，可以用于创建对象、调用方法等操作。</p>
+</li>
+<li><p><strong>Field类：</strong> <code>java.lang.reflect.Field</code>类表示类的字段（成员变量）。它提供了一系列的方法，可以用于获取和设置字段的值。</p>
+</li>
+</ol>
+<h3 id="反射的基本用法示例："><a href="#反射的基本用法示例：" class="headerlink" title="反射的基本用法示例："></a>反射的基本用法示例：</h3><ol>
+<li>获取Class对象：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; clazz = Class.forName(<span class="string">&quot;com.example.MyClass&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建对象：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> clazz.newInstance();</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>获取构造方法并创建对象：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Constructor&lt;?&gt; constructor = clazz.getConstructor(String.class);</span><br><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> constructor.newInstance(<span class="string">&quot;parameter&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>调用方法：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;methodName&quot;</span>, parameterTypes);</span><br><span class="line"><span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(obj, args);</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>获取和设置字段的值：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> clazz.getDeclaredField(<span class="string">&quot;fieldName&quot;</span>);</span><br><span class="line">field.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="type">Object</span> <span class="variable">value</span> <span class="operator">=</span> field.get(obj);</span><br><span class="line">field.set(obj, newValue);</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><ol>
+<li><p>反射会降低性能：由于反射是在运行时动态地进行类信息的检查和调用，因此会带来一定的性能开销。在性能要求较高的场景下，应尽量避免频繁地使用反射。</p>
+</li>
+<li><p>安全性问题：反射可以绕过Java的访问控制，例如私有方法和字段可以被访问和修改。因此，在使用反射时需要格外小心，确保代码的安全性和可靠性。</p>
+</li>
+</ol>
+<p>总的来说，Java的反射机制为程序提供了一种强大的动态性，使得程序能够在运行时动态地获取类的信息、创建对象、调用方法和操作属性，从而实现更灵活和动态的编程。</p>
+<h1 id="经典记录"><a href="#经典记录" class="headerlink" title="经典记录"></a>经典记录</h1><h2 id="递归查找孩子数量"><a href="#递归查找孩子数量" class="headerlink" title="递归查找孩子数量"></a>递归查找孩子数量</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TODO：求孩子节点数量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> parentId</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getChildrenNumberByParentId</span><span class="params">(<span class="type">int</span> shipId, String parentId)</span>&#123;</span><br><span class="line">    <span class="comment">// children属性是类的数据成员，也就是说每定义一个对象，children属性都是空的</span></span><br><span class="line">    <span class="comment">// 重新定义的类，并没有保存前面的children信息，麻了麻了，改Bug改了几百遍</span></span><br><span class="line">    <span class="comment">// 所以每次查库然后返回的订阅表对象都是一个单独的变量，不会保存之前的信息，因此每次返回的children都是null，因为之前没有更新过children</span></span><br><span class="line">    <span class="comment">// 吃了大亏这块！！！</span></span><br><span class="line"></span><br><span class="line">    List&lt;SubScribeTable&gt; currentRecord = subscribeMapper.getDefaultSubscriptionsByUserId(parentId);</span><br><span class="line">    <span class="comment">// TODO：获取了整个订阅表，这块应该得删掉</span></span><br><span class="line">    List&lt;SubScribeTable&gt; subscribeTree = getSubscribeTreeByShipId(shipId);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (currentRecord == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;SubScribeTable&gt; children = currentRecord.get(<span class="number">0</span>).getChildren();</span><br><span class="line">    <span class="keyword">if</span> (children == <span class="literal">null</span> || children.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> children.size();</span><br><span class="line">    <span class="comment">// 递归统计每个子记录的子记录数量，并累加到 count 中</span></span><br><span class="line">    <span class="keyword">for</span> (SubScribeTable child : children) &#123;</span><br><span class="line">        count += getChildrenNumberByParentId(child.getShipId(), child.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SpringBoot</tag>
+        <tag>IDEA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣刷题</title>
+    <url>/2024/05/06/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/</url>
+    <content><![CDATA[<p>力扣刷题笔记</p>
+<span id="more"></span>
+
+<h1 id="27-移除元素"><a href="#27-移除元素" class="headerlink" title="27. 移除元素"></a>27. 移除元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个数组 <code>nums</code> 和一个值 <code>val</code>，你需要 <strong><a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95">原地</a></strong> 移除所有数值等于 <code>val</code> 的元素，并返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并 <strong><a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95">原地 </a>修改输入数组</strong>。</p>
+<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="暴力解法："><a href="#暴力解法：" class="headerlink" title="暴力解法："></a>暴力解法：</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 时间复杂度：O(n^2)</span></span><br><span class="line"><span class="comment">// 空间复杂度：O(1)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">removeElement</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> size = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] == val) &#123; <span class="comment">// 发现需要移除的元素，就将数组集体向前移动一位</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; size; j++) &#123;</span><br><span class="line">                    nums[j - <span class="number">1</span>] = nums[j];</span><br><span class="line">                &#125;</span><br><span class="line">                i--; <span class="comment">// 因为下标i以后的数值都向前移动了一位，所以i也向前移动一位</span></span><br><span class="line">                size--; <span class="comment">// 此时数组的大小-1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="双指针："><a href="#双指针：" class="headerlink" title="双指针："></a>双指针：</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//时间复杂度：O(n^2)</span></span><br><span class="line"><span class="comment">//空间复杂度：O(1)</span></span><br><span class="line"><span class="comment">//元素的相对位置没有发生改变</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">removeElement</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> slowIndex = <span class="number">0</span>;  <span class="comment">//慢指针指向</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> fastIndex = <span class="number">0</span>; fastIndex &lt; nums.<span class="built_in">size</span>(); fastIndex++) &#123;</span><br><span class="line">            <span class="comment">//当fastIndex指向val时，慢指针不动</span></span><br><span class="line">            <span class="keyword">if</span> (nums[fastIndex] != val) &#123;  <span class="comment">//当没找到val时，将快指针所指向的值nums[fastIndex]赋值给此时慢指针所指向的值nums[slowIndex]，因此此时慢指针指向的值一定是val。赋值即使移除值为val的元素。</span></span><br><span class="line">                nums[slowIndex++] = nums[fastIndex];  <span class="comment">//slowIndex++是为了保证当赋值发生时，慢指针也得往下走，因为当前slowIndex被赋值后肯定不是val了，slowIndex总是指向val所在的位置</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> slowIndex;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>例如：nums：2 3 3 4 8 3 9 1    val：3</p>
+<h3 id="快排式双指针法："><a href="#快排式双指针法：" class="headerlink" title="快排式双指针法："></a>快排式双指针法：</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 相向双指针方法，基于元素顺序可以改变的题目描述改变了元素相对位置，确保了移动最少元素</span></span><br><span class="line"><span class="comment">* 时间复杂度：O(n)</span></span><br><span class="line"><span class="comment">* 空间复杂度：O(1)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">removeElement</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> leftIndex = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> rightIndex = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (leftIndex &lt;= rightIndex) &#123;</span><br><span class="line">            <span class="comment">// 找左边等于val的元素</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt;= rightIndex &amp;&amp; nums[leftIndex] != val)&#123;</span><br><span class="line">                ++leftIndex;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 找右边不等于val的元素</span></span><br><span class="line">            <span class="keyword">while</span> (leftIndex &lt;= rightIndex &amp;&amp; nums[rightIndex] == val) &#123;</span><br><span class="line">                -- rightIndex;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 将右边不等于val的元素覆盖左边等于val的元素</span></span><br><span class="line">            <span class="keyword">if</span> (leftIndex &lt; rightIndex) &#123;</span><br><span class="line">                nums[leftIndex++] = nums[rightIndex--];    <span class="comment">//自加表示在新的元素区间(去除刚才检查过的)重新执行判断</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//循环执行结束的时候，leftIndex右边不为val的元素全部都赋值到leftIndex左边，因此leftIndex即为移除后数组长度</span></span><br><span class="line">        <span class="keyword">return</span> leftIndex;   <span class="comment">// leftIndex一定指向了最终数组末尾的下一个元素</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注意：左指针用来找到元素值为val的元素，因此再循环里需要用nums[leftIndex]!&#x3D;val，这样停止循环的时候就找到了值为val的元素</p>
+<p>右指针用来找到元素值不是val的元素，因此循环里判断需要写nums[rightIndex]&#x3D;&#x3D;val，同上原理</p>
+<h1 id="977-有序数组的平方"><a href="#977-有序数组的平方" class="headerlink" title="977. 有序数组的平方"></a>977. 有序数组的平方</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个按 <strong>非递减顺序</strong> 排序的整数数组 <code>nums</code>，返回 <strong>每个数字的平方</strong> 组成的新数组，要求也按 <strong>非递减顺序</strong> 排序。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [-4,-1,0,3,10]</span><br><span class="line">输出：[0,1,9,16,100]</span><br><span class="line">解释：平方后，数组变为 [16,1,0,9,100]</span><br><span class="line">排序后，数组变为 [0,1,9,16,100]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [-7,-3,2,3,11]</span><br><span class="line">输出：[4,9,9,49,121]</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 104</code></li>
+<li><code>-104 &lt;= nums[i] &lt;= 104</code></li>
+<li><code>nums</code> 已按 <strong>非递减顺序</strong> 排序</li>
+</ul>
+<h2 id="题解-1"><a href="#题解-1" class="headerlink" title="题解"></a>题解</h2><h3 id="暴力解法：先平方再排序"><a href="#暴力解法：先平方再排序" class="headerlink" title="暴力解法：先平方再排序"></a>暴力解法：先平方再排序</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//时间复杂度O(n+nlogn)，快速排序</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">sortedSquares</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//先对元素都平方</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            nums[i] *= nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//对nums进行快速排序</span></span><br><span class="line">        <span class="built_in">quickSort</span>(nums, <span class="number">0</span>, nums.<span class="built_in">size</span>() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//划分函数</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">Partition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> low, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> pivot = nums[high];</span><br><span class="line">        <span class="type">int</span> i = low - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = low; j &lt; high; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[j] &lt;= pivot) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                <span class="type">int</span> temp1 = nums[i];</span><br><span class="line">                nums[i] = nums[j];</span><br><span class="line">                nums[j] = temp1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> temp2 = nums[i + <span class="number">1</span>];</span><br><span class="line">        nums[i + <span class="number">1</span>] = nums[high];</span><br><span class="line">        nums[high] = temp2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//快速排序算法</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">quickSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> low, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            <span class="type">int</span> partitionIndex = <span class="built_in">Partition</span>(nums, low, high);</span><br><span class="line">            <span class="built_in">quickSort</span>(nums, low, partitionIndex - <span class="number">1</span>);</span><br><span class="line">            <span class="built_in">quickSort</span>(nums, partitionIndex + <span class="number">1</span>, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="双指针解法"><a href="#双指针解法" class="headerlink" title="双指针解法"></a>双指针解法</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">sortedSquares</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> k = A.<span class="built_in">size</span>() - <span class="number">1</span>;  <span class="comment">//指向result数组末尾的指针</span></span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">result</span><span class="params">(A.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>, j = A.<span class="built_in">size</span>() - <span class="number">1</span>; i &lt;= j;) &#123; <span class="comment">// 注意这里要i &lt;= j，因为最后要处理两个元素</span></span><br><span class="line">            <span class="keyword">if</span> (A[i] * A[i] &lt; A[j] * A[j])  &#123;</span><br><span class="line">                result[k--] = A[j] * A[j];</span><br><span class="line">                j--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                result[k--] = A[i] * A[i];</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="209-长度最小的子数组【经典】"><a href="#209-长度最小的子数组【经典】" class="headerlink" title="209. 长度最小的子数组【经典】"></a>209. 长度最小的子数组【经典】</h1><h2 id="题目描述-2"><a href="#题目描述-2" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个含有 <code>n</code> 个正整数的数组和一个正整数 <code>target</code> <strong>。</strong></p>
+<p>找出该数组中满足其总和大于等于 <code>target</code> 的长度最小的 <strong>连续子数组</strong> <code>[numsl, numsl+1, ..., numsr-1, numsr]</code> ，并返回其长度<strong>。</strong>如果不存在符合条件的子数组，返回 <code>0</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：target = 7, nums = [2,3,1,2,4,3]</span><br><span class="line">输出：2</span><br><span class="line">解释：子数组 [4,3] 是该条件下的长度最小的子数组。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：target = 4, nums = [1,4,4]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：target = 11, nums = [1,1,1,1,1,1,1,1]</span><br><span class="line">输出：0</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= target &lt;= 109</code></li>
+<li><code>1 &lt;= nums.length &lt;= 105</code></li>
+<li><code>1 &lt;= nums[i] &lt;= 105</code></li>
+</ul>
+<h2 id="题解-2"><a href="#题解-2" class="headerlink" title="题解"></a>题解</h2><h3 id="暴力解法"><a href="#暴力解法" class="headerlink" title="暴力解法"></a>暴力解法</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 时间复杂度O(n^2)</span></span><br><span class="line"><span class="comment">// 存在一些测试用例超出时长限制</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 暴力解法</span></span><br><span class="line">        <span class="type">int</span> result = INT32_MAX;</span><br><span class="line">        <span class="type">int</span> sum = <span class="number">0</span>;  <span class="comment">// 子序列总和</span></span><br><span class="line">        <span class="type">int</span> subLength = <span class="number">0</span>;  <span class="comment">//计算子序列长度</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            sum = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = i; j &lt; nums.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                sum += nums[j];        <span class="comment">// 先累加在进行判断</span></span><br><span class="line">                subLength = j - i + <span class="number">1</span>; <span class="comment">//关键，计算子序列的长度</span></span><br><span class="line">                <span class="keyword">if</span> (sum &gt;= target) &#123;</span><br><span class="line">                    result = result &lt; subLength ? result : subLength;  <span class="comment">// 条件运算符来判断是否更新result</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result == INT32_MAX ? <span class="number">0</span> : result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3>]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>力扣</tag>
+      </tags>
+  </entry>
+</search>
