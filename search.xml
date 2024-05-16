@@ -221,6 +221,22 @@
 <h2 id="文章摘要"><a href="#文章摘要" class="headerlink" title="文章摘要"></a>文章摘要</h2><p>一篇文章开头一段文字描述就是摘要，摘要和正文用 <code>&lt;!-- more --&gt;</code> 隔开，前后一定要有空行。例如：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">Front Matter 部分</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">在心率管家默默无闻地上线了一年多之后，现在终于打算来好好聊聊关于手机摄像头测量心率的那些事。本文参考了很多前辈的文章，将在文末列出。</span><br><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">后面是正文部分，在主页看不到。</span><br></pre></td></tr></table></figure>
 
+<h2 id="文本居中的引用"><a href="#文本居中的引用" class="headerlink" title="文本居中的引用"></a>文本居中的引用</h2><p>此标签将生成一个带上下分割线的引用，同时引用内文本将自动居中。 文本居中时，多行文本若长度不等，视觉上会显得不对称，因此建议在引用单行文本的场景下使用。 例如作为文章开篇引用 或者 结束语之前的总结引用。</p>
+<p><strong>使用方式：</strong></p>
+<ul>
+<li>HTML方式：使用这种方式时，给 <code>img</code> 添加属性 <code>class=&quot;blockquote-center&quot;</code> 即可。</li>
+<li>标签方式：使用 <code>centerquote</code> 或者 简写 <code>cq</code>。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- HTML方式: 直接在 Markdown 文件中编写 HTML 来调用 --&gt;</span><br><span class="line">&lt;!-- 其中 class=&quot;blockquote-center&quot; 是必须的 --&gt;</span><br><span class="line">&lt;blockquote class=&quot;blockquote-center&quot;&gt;blah blah blah&lt;/blockquote&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 标签 方式，要求版本在0.4.5或以上 --&gt;</span><br><span class="line">&#123;% centerquote %&#125;blah blah blah&#123;% endcenterquote %&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 标签别名 --&gt;</span><br><span class="line">&#123;% cq %&#125; blah blah blah &#123;% endcq %&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>下面是使用标签别名方式的效果示例：</strong></p>
+<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>人的一切痛苦，本质上都是对自己的无能的愤怒。</p>
+<p>王小波</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
 ]]></content>
       <categories>
         <category>技术分享</category>
@@ -1192,9 +1208,11 @@
   <entry>
     <title>随笔-跨年当天的胡思乱想</title>
     <url>/2023/12/31/%E9%9A%8F%E7%AC%94/</url>
-    <content><![CDATA[<h1 id="今天是2023年的最后一天"><a href="#今天是2023年的最后一天" class="headerlink" title="今天是2023年的最后一天"></a>今天是2023年的最后一天</h1><p>对跨年没什么兴趣，时的连续性是不变的，并不是说零点一过就有什么发了质的改变，今天也是和往常完全相同的一天，但是喜欢你，所以会对你说新年快乐。</p>
-<p>有人会说”情绪退步也就意味着不再年轻了“，但是我想说，该年轻的时候一样年轻</p>
+    <content><![CDATA[<p>今天是2023年的最后一天</p>
+<p>对跨年没什么兴趣，时的连续性是不变的，并不是说零点一过就有什么发了质的改变，今天也是和往常完全相同的一天，但是喜欢你，所以会对你说新年快乐。</p>
 <span id="more"></span>
+
+<p>有人会说”情绪退步也就意味着不再年轻了“，但是我想说，该年轻的时候一样年轻</p>
 ]]></content>
       <categories>
         <category>随笔</category>
